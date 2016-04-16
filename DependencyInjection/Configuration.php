@@ -21,29 +21,23 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('ad_boleta');
 
-        /*$rootNode
+        $rootNode
             ->children()
-                ->scalarNode('perfil_class')->isRequired()->cannotBeEmpty()->end()
-                ->scalarNode('perfil_table_alias')->isRequired()->cannotBeEmpty()->end()
-                ->scalarNode('route_redirect')->defaultValue('homepage')->end()
-                ->scalarNode('session_name')->defaultValue('ad_perfil.perfil_id')->end()
-                ->scalarNode('icon_path')->isRequired()->end()
-                ->scalarNode('icon_alt')->isRequired()->end()
-                ->arrayNode('navegacion')
+                ->arrayNode('database')
                     ->addDefaultsIfNotSet()
                     ->children()
-                        ->scalarNode('homepage_title')->isRequired()->cannotBeEmpty()->end()
-                        ->scalarNode('homepage_subtitle')->defaultValue('')->end()
-                        ->scalarNode('homepage_route')->defaultValue('homepage')->cannotBeEmpty()->end()
-                        ->scalarNode('homepage_name')->defaultValue('Inicio')->cannotBeEmpty()->end()
-                        ->scalarNode('homepage_icono')->defaultValue('fa fa-home')->cannotBeEmpty()->end()
-                        ->scalarNode('homepage_color')->defaultValue('blanco')->cannotBeEmpty()->end()
+                        ->scalarNode('driver')->isRequired()->cannotBeEmpty()->defaultValue('pdo_pgsql')->end()
+                        ->scalarNode('host')->defaultValue('localhost')->end()
+                        ->scalarNode('port')->defaultValue('5432')->cannotBeEmpty()->end()
+                        ->scalarNode('name')->defaultValue('ad_boletadb')->cannotBeEmpty()->end()
+                        ->scalarNode('user')->isRequired()->cannotBeEmpty()->end()
+                        ->scalarNode('password')->isRequired()->cannotBeEmpty()->end()
                     ->end()
                 ->end()
             ->end()
         ->end();
 
-        $this->addFiltroSection($rootNode);*/
+        /*$this->addFiltroSection($rootNode);*/
 
         return $treeBuilder;
     }

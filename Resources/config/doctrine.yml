@@ -14,8 +14,7 @@ doctrine:
   orm:
     entity_managers:
       ad_boleta:
-           connection: ad_boleta
-           mappings:
-            ADBoletaBundle: ~
-          auto_generate_proxy_classes: "%kernel.debug%"
-          naming_strategy: doctrine.orm.naming_strategy.underscore
+        connection: ad_boleta
+        mappings:
+          ADBoletaBundle: ~
+        naming_strategy: doctrine.orm.naming_strategy.underscore
