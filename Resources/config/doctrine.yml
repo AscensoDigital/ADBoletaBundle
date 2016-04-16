@@ -1,0 +1,21 @@
+# Doctrine Configuration
+doctrine:
+  dbal:
+    connections:
+      ad_boleta:
+        driver:   "%ad_boleta_database_driver%"
+        host:     "%ad_boleta_database_host%"
+        port:     "%ad_boleta_database_port%"
+        dbname:   "%ad_boleta_database_name%"
+        user:     "%ad_boleta_database_user%"
+        password: "%ad_boleta_database_password%"
+        charset:  UTF8
+
+  orm:
+    entity_managers:
+      ad_boleta:
+           connection: ad_boleta
+           mappings:
+            ADBoletaBundle: ~
+          auto_generate_proxy_classes: "%kernel.debug%"
+          naming_strategy: doctrine.orm.naming_strategy.underscore

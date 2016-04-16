@@ -1,0 +1,20 @@
+# Learn more about services, parameters and containers at
+# http://symfony.com/doc/current/book/service_container.html
+parameters:
+#    parameter_name: value
+
+services:
+#    service_name:
+#        class: AppBundle\Directory\ClassName
+#        arguments: ["@another_service_name", "plain_value", "%parameter_name%"]
+  ad_boleta.xpdf:
+      class: AscensoDigital\BoletaBundle\Service\XpdfService
+      arguments: ["@?logger"]
+
+  ad_boleta.boleta_manager:
+      class: AscensoDigital\BoletaBundle\Service\BoletaManager
+      arguments: ["@ad_boleta.xpdf", "@doctrine.orm.entity_manager"]
+
+  ad_boleta.email_reader:
+    class: AscensoDigital\BoletaBundle\Service\EmailReaderService
+
