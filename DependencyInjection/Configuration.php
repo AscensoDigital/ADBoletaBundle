@@ -21,7 +21,7 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('ad_boleta');
 
-        $rootNode
+        /*$rootNode
             ->children()
                 ->arrayNode('database')
                     ->addDefaultsIfNotSet()
@@ -35,7 +35,7 @@ class Configuration implements ConfigurationInterface
                     ->end()
                 ->end()
             ->end()
-        ->end();
+        ->end();*/
 
         /*$this->addFiltroSection($rootNode);*/
 

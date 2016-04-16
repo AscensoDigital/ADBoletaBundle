@@ -22,13 +22,8 @@ class ADBoletaExtension extends Extension
     {
         $config = $this->processConfiguration(new Configuration(), $configs);
 
-        $container->setParameter('ad_boleta_database_driver',$config['database']['driver']);
-        $container->setParameter('ad_boleta_database_host',$config['database']['host']);
-        $container->setParameter('ad_boleta_database_port',$config['database']['port']);
-        $container->setParameter('ad_boleta_database_name',$config['database']['name']);
-        $container->setParameter('ad_boleta_database_user',$config['database']['user']);
-        $container->setParameter('ad_boleta_database_password',$config['database']['password']);
-
+        $container->setParameter('ad_boleta.config',$config);
+        
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
     }
