@@ -23,7 +23,7 @@ class ADBoletaExtension extends Extension
         $config = $this->processConfiguration(new Configuration(), $configs);
 
         $container->setParameter('ad_boleta.config',$config);
-        
+        $container->setParameter('ad_boleta_ruta_boletas', $config['ruta_boletas']);
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
     }

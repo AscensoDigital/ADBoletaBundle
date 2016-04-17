@@ -21,9 +21,10 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('ad_boleta');
 
-        /*$rootNode
+        $rootNode
             ->children()
-                ->arrayNode('database')
+                ->scalarNode('ruta_boletas')->cannotBeEmpty()->isRequired()->end()
+                /*->arrayNode('database')
                     ->addDefaultsIfNotSet()
                     ->children()
                         ->scalarNode('driver')->defaultValue('pdo_pgsql')->cannotBeEmpty()->end()
@@ -33,9 +34,9 @@ class Configuration implements ConfigurationInterface
                         ->scalarNode('user')->isRequired()->cannotBeEmpty()->end()
                         ->scalarNode('password')->isRequired()->cannotBeEmpty()->end()
                     ->end()
-                ->end()
+                ->end()*/
             ->end()
-        ->end();*/
+        ->end();
 
         /*$this->addFiltroSection($rootNode);*/
 
