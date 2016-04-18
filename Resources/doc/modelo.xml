@@ -130,6 +130,9 @@
         <row name="nombre" null="0" autoincrement="0">
             <datatype>VARCHAR(200)</datatype>
         </row>
+        <row name="slug" null="0" autoincrement="0">
+            <datatype>VARCHAR(200)</datatype>
+        </row>
         <row name="direccion" null="1" autoincrement="0">
             <datatype>VARCHAR(200)</datatype>
             <default>NULL</default></row>

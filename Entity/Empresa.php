@@ -9,6 +9,8 @@
 namespace AscensoDigital\BoletaBundle\Entity;
 
 
+use Cocur\Slugify\Slugify;
+
 class Empresa
 {
     /**
@@ -55,6 +57,13 @@ class Empresa
      * @ORM\Column(name="nombre", type="string", length=200, nullable=false)
      */
     protected $nombre;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="slug", type="string", length=200, nullable=false)
+     */
+    protected $slug;
 
     /**
      * @var string
@@ -208,6 +217,8 @@ class Empresa
     public function setNombre($nombre)
     {
         $this->nombre = $nombre;
+        $slugify = new Slugify();
+        $this->setSlug($slugify->slugify($nombre));
         return $this;
     }
 
@@ -379,5 +390,23 @@ class Empresa
     public function getRepresentanteEstadoCivil()
     {
         return $this->representanteEstadoCivil;
+    }
+
+    /**
+     * @param string $slug
+     * @return Empresa
+     */
+    public function setSlug($slug)
+    {
+        $this->slug = $slug;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getSlug()
+    {
+        return $this->slug;
     }
 }

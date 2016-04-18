@@ -129,8 +129,8 @@ class BoletaMailVigenteCommand extends ContainerAwareCommand
                             $nombreFichero = $attachment ['filename'];
                             $adjunto = $attachment ['attachment'];
                             if ($adjunto) {
-                                $path_boleta=$this->getContainer()->getParameter('ad_boleta_ruta_boletas'). DIRECTORY_SEPARATOR . $nombreFichero;
-                                $bhe->setRutaArchivo($nombreFichero);
+                                $path_boleta=$this->getContainer()->getParameter('ad_boleta_ruta_boletas'). DIRECTORY_SEPARATOR . $empresa->getSlug() . DIRECTORY_SEPARATOR .$nombreFichero;
+                                $bhe->setRutaArchivo($empresa->getSlug() . DIRECTORY_SEPARATOR . $nombreFichero);
                                 
                                 //se guarda boleta en el servidor
                                 $gestor = fopen($path_boleta, 'w');
