@@ -11,6 +11,12 @@ namespace AscensoDigital\BoletaBundle\Entity;
 
 use Cocur\Slugify\Slugify;
 
+/**
+ * Empresa
+ *
+ * @ORM\Table(name="empresa")
+ * @ORM\Entity
+ */
 class Empresa
 {
     /**
