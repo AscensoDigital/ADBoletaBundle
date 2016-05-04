@@ -51,7 +51,11 @@ class BoletaMailVigenteCommand extends ContainerAwareCommand
         $password = $input->getArgument('password');#'pagos.2015';
         $mailbox = "{imap.gmail.com:993/imap/ssl}INBOX";
 
-        $conn=imap_open($mailbox , $user , $password) or die('Cannot connect to Gmail: ' . imap_last_error());
+        $conn=imap_open($mailbox , $user , $password);
+        if($conn===false) {
+            $output->writeln('No se pudo conectar con gmail: '. $user. ' -> '.$password);
+            return;
+        }
         $log=false;
         if(is_null($input->getOption('mail_id'))){
             $vigentes = imap_search($conn, 'SUBJECT "Emision" UNSEEN', SE_UID);
