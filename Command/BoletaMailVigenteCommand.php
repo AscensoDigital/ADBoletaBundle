@@ -43,7 +43,7 @@ class BoletaMailVigenteCommand extends ContainerAwareCommand
         $email_reader=$this->getContainer()->get('ad_boleta.email_reader');
         
         $bhe_vigente=$em->getRepository('ADBoletaBundle:BoletaEstado')->find(BoletaEstado::VIGENTE);
-        $bhe_invalid=$em->getRepository('AppBundle:BoletaEstado')->find(BoletaEstado::PDF_INVALIDO);
+        $bhe_invalid=$em->getRepository('ADBoletaBundle:BoletaEstado')->find(BoletaEstado::PDF_INVALIDO);
         //$user = 'consultas@ennea.cl';
         //$password = 'ennea.2014';
 
