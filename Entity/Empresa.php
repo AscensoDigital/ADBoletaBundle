@@ -8,7 +8,7 @@
 
 namespace AscensoDigital\BoletaBundle\Entity;
 
-
+use Doctrine\ORM\Mapping as ORM;
 use Cocur\Slugify\Slugify;
 
 /**
