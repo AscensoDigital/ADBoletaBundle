@@ -8,7 +8,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * BoletaHonorario
  *
- * @ORM\Table(name="boleta_honorario", indexes={@ORM\Index(name="IDX_FD85147C76426C95", columns={"boleta_estado_id"}), @ORM\Index(name="IDX_FD85147CDB38439E", columns={"usuario_id"}), @ORM\Index(name="IDX_FD85147C46EBF93B", columns={"archivo_id"})})
+ * @ORM\Table(name="boleta_honorario")
  * @ORM\Entity(repositoryClass="AscensoDigital\BoletaBundle\Repository\BoletaHonorarioRepository")
  */
 class BoletaHonorario
