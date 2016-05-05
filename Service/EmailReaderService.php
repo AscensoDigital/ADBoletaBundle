@@ -94,12 +94,12 @@ class EmailReaderService
 
     private function utf8_encode($encoding,$valor){
         /* 3 = BASE64 encoding */
-        if($encoding == 3)
+        if($encoding == ENCBASE64)
         {
             $valor = base64_decode($valor);
         }
         /* 4 = QUOTED-PRINTABLE encoding */
-        elseif($encoding == 4)
+        elseif($encoding == ENCQUOTEDPRINTABLE)
         {
             $valor = quoted_printable_decode($valor);
         }
