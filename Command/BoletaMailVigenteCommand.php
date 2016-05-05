@@ -10,6 +10,7 @@ use AscensoDigital\BoletaBundle\Service\EmailReaderService;
 use AscensoDigital\BoletaBundle\Util\BoletaMailEmision;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -29,7 +30,8 @@ class BoletaMailVigenteCommand extends ContainerAwareCommand
             ->setDescription('Procesa los correos de boletas vigentes enviados por SII al mail pagos.')
             ->addArgument('user',InputArgument::REQUIRED,'Cuenta de email a leer')
             ->addArgument('password',InputArgument::REQUIRED,'Password cuenta de email a leer')
-            ->addOption('mail_id','m',InputOption::VALUE_OPTIONAL,'id email en particular',null);
+            ->addOption('mail_id','m',InputOption::VALUE_OPTIONAL,'id email en particular',null)
+            ->addOption('status','s',InputOption::VALUE_NONE,'mostrar barra de avance');
     }
 
     /**
@@ -58,13 +60,11 @@ class BoletaMailVigenteCommand extends ContainerAwareCommand
             $output->writeln('No se pudo conectar con gmail: '. $user. ' -> '.$password);
             return;
         }
-        $log=false;
         if(is_null($input->getOption('mail_id'))){
             $vigentes = imap_search($conn, 'SUBJECT "Emision" UNSEEN', SE_UID);
             //$vigentes = imap_search($conn, 'SUBJECT "Emision"', SE_UID);
         }
         else {
-            $log=true;
             $vigentes=array($input->getOption('mail_id'));
         }
         if(!$vigentes) {
@@ -72,17 +72,13 @@ class BoletaMailVigenteCommand extends ContainerAwareCommand
             return;
         }
         $tot=count($vigentes);
-        $particion = round($tot/20) ? round($tot/20) : 20;
-        if($log) {
+        if($input->getOption('status')) {
             $output->writeln('Se revisarán ' . $tot . ' correos');
+            $progressBar= new ProgressBar($output,$tot);
+            $progressBar->setFormat(' %current%/%max% [%bar%] %percent:3s%% %elapsed:6s%/%estimated:-6s% %memory:6s%');
         }
         $cont=0;
         foreach ($vigentes as $email) {
-            if($log){
-                $output->writeln($email);
-                $structure = imap_fetchstructure($conn, $email);
-                print_r($structure);
-            }
             $contenidos=$email_reader->getContenido($conn,$email);
             if(!isset($contenidos['plain'][0])) {
                 $output->writeln($email.' Correo sin cuerpo leible');
@@ -185,17 +181,15 @@ class BoletaMailVigenteCommand extends ContainerAwareCommand
                 $em->persist($bhe);
                 $em->flush();
             }
-            /*else {
-                $output->writeln(' [OK]');
-            }*/
-            if(($cont % $particion) == 0) {
-                //$em->flush();
-                //$output->writeln($cont."/".$tot.' - '.round($cont/$tot*100).'% - '.date('H:i:s'));
+            if($input->getOption('status')) {
+                $progressBar->advance();
             }
             $cont++;
         }
-        //$em->flush();
         imap_close($conn);
+        if($input->getOption('status')) {
+            $progressBar->finish();
+        }
     }
 
     private function existPath($path){
