@@ -87,7 +87,7 @@ class BoletaMailVigenteCommand extends ContainerAwareCommand
                 $email_body='';
             }
             else {
-                $email_body=$contenidos['plain'][0];
+                $email_body=$contenidos['plain'][0]['plain'];
             }
             BoletaMailEmision::loadMsg($email_body);
             $rut_boleta=BoletaMailEmision::getRutEmisor();
