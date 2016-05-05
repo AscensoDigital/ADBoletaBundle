@@ -77,7 +77,7 @@ class BoletaMailEmision
         if(is_null(self::$razonSocial)) {
             $i=strpos(self::$msg,'Estimado Contribuyente: ');
             if(false!==$i){
-                $init = $i + strlen('Estimado Contribuyente: ');
+                $init = $i + strlen('Estimado Contribuyente: ') +2 ;
                 $final=strpos(self::$msg,"\n",$init+1);
                 self::$razonSocial=substr(self::$msg,$init,$final-$init);
             }
