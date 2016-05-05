@@ -103,6 +103,7 @@ class BoletaMailVigenteCommand extends ContainerAwareCommand
             $empresa=$em->getRepository('ADBoletaBundle:Empresa')->findOneBy(['razonSocial' => $razon_social]);
             if(!$empresa){
                 $output->writeln($email.' Empresa con razon social '.$razon_social.' no registrada');
+                continue;
             }
             $this->existPath($this->getContainer()->getParameter('ad_boleta_ruta_boletas'). DIRECTORY_SEPARATOR . $empresa->getSlug());
             //$output->writeln(' Buscando Boleta '.$boleta_numero.' RUT: '.$rut_boleta);
