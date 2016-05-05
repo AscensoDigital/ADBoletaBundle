@@ -14,6 +14,8 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 use XPDF\Exception\RuntimeException;
 
 class BoletaMailVigenteCommand extends ContainerAwareCommand
@@ -102,6 +104,7 @@ class BoletaMailVigenteCommand extends ContainerAwareCommand
             if(!$empresa){
                 $output->writeln($email.' Empresa con razon social '.$razon_social.' no registrada');
             }
+            $this->existPath($this->getContainer()->getParameter('ad_boleta_ruta_boletas'). DIRECTORY_SEPARATOR . $empresa->getSlug());
             //$output->writeln(' Buscando Boleta '.$boleta_numero.' RUT: '.$rut_boleta);
             /** @var BoletaHonorario $bhe */
             $bhe=$em->getRepository('ADBoletaBundle:BoletaHonorario')->findOneBy(array('rutEmisor' => $rut_boleta, 'numero' => $boleta_numero));
@@ -192,5 +195,16 @@ class BoletaMailVigenteCommand extends ContainerAwareCommand
         }
         //$em->flush();
         imap_close($conn);
+    }
+
+    private function existPath($path){
+        $fs = new Filesystem();
+        if(!$fs->exists($path)) {
+            try {
+                $fs->mkdir($path);
+            } catch (IOExceptionInterface $e) {
+                echo "An error occurred while creating your directory at " . $e->getPath();
+            }
+        }
     }
 }
