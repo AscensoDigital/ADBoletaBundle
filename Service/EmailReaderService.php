@@ -103,6 +103,6 @@ class EmailReaderService
         {
             $valor = quoted_printable_decode($valor);
         }
-        return mb_detect_encoding($valor) != 'utf8' ? utf8_encode($valor) : $valor;
+        return mb_detect_encoding($valor) != 'UTF-8' ? utf8_encode($valor) : $valor;
     }
 }
