@@ -14,7 +14,7 @@ use Cocur\Slugify\Slugify;
 /**
  * Empresa
  *
- * @ORM\Table(name="empresa")
+ * @ORM\Table(name="ad_boleta_empresa")
  * @ORM\Entity
  */
 class Empresa

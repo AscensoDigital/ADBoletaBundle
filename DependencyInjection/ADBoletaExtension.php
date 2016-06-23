@@ -32,37 +32,4 @@ class ADBoletaExtension extends Extension
     {
         return 'ad_boleta';
     }
-
-    private function loadBundleFiltros($config){
-        $filtro_permiso=[
-            'type' => 'Symfony\Bridge\Doctrine\Form\Type\EntityType',
-            'table_alias' => 'adp_prm',
-            'field' => 'id',
-            'operator' => 'in',
-            'query_builder_perfil' => false,
-            'query_builder_user' => false,
-            'query_builder_method' => 'getQueryBuilderOrderNombre',
-            'options' => [
-                'label' => 'Permiso',
-                'class' => 'AscensoDigital\PerfilBundle\Entity\Permiso',
-                'multiple' => true
-            ]];
-        $config['filtros']['adperfil_permiso']=$filtro_permiso;
-
-        $filtro_perfil=[
-            'type' => 'Symfony\Bridge\Doctrine\Form\Type\EntityType',
-            'table_alias' => $config['perfil_table_alias'],
-            'field' => 'id',
-            'operator' => 'in',
-            'query_builder_perfil' => true,
-            'query_builder_user' => false,
-            'query_builder_method' => 'getQueryBuilderOrderRole',
-            'options' => [
-                'label' => 'Perfil',
-                'class' => $config['perfil_class'],
-                'multiple' => true
-            ]];
-        $config['filtros']['adperfil_perfil']=$filtro_perfil;
-        return $config;
-    }
 }

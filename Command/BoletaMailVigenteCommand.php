@@ -39,7 +39,7 @@ class BoletaMailVigenteCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output) {
         /** @var ObjectManager $em */
-        $em = $this->getContainer()->get('doctrine')->getManager('ad_boleta');
+        $em = $this->getContainer()->get('doctrine')->getManager();
         
         /** @var BoletaManager $boleta_srv */
         $boleta_srv= $this->getContainer()->get('ad_boleta.boleta_manager');

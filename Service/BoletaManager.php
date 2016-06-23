@@ -3,7 +3,6 @@
 namespace AscensoDigital\BoletaBundle\Service;
 
 use AscensoDigital\BoletaBundle\Entity\BoletaEstado;
-use AscensoDigital\BoletaBundle\Service\XpdfService;
 use Doctrine\ORM\EntityManager;
 
 /**
@@ -57,7 +56,6 @@ class BoletaManager {
         $this->rutDestinatario=null;
         $this->rutEmisor=null;
         $this->nombreEmisor=null;
-        //dump($this->arrCont);
     }
     
     public function getContenido() {
@@ -178,11 +176,11 @@ class BoletaManager {
     }
     
     public function isUniqueLoaded() {
-        return !$this->em->getRepository('ADBoletaBundle:BoletaHonorario','ad_boleta')->findOneBy(array('numero' => $this->getBoletaNumero(), 'rut' => $this->getRutEmisorCompleto()));
+        return !$this->em->getRepository('ADBoletaBundle:BoletaHonorario')->findOneBy(array('numero' => $this->getBoletaNumero(), 'rut' => $this->getRutEmisorCompleto()));
     }
     
     public function isAnulada() {
-        return is_object($this->em->getRepository('ADBoletaBundle:BoletaHonorario','ad_boleta')->findOneBy(array('rut' => $this->getRutEmisorCompleto(),
+        return is_object($this->em->getRepository('ADBoletaBundle:BoletaHonorario')->findOneBy(array('rut' => $this->getRutEmisorCompleto(),
                                                                                             'numero' => $this->getBoletaNumero(),
                                                                                             'boletaEstado' => array(BoletaEstado::ANULADA,BoletaEstado::VCA_ANULADA))));
     }
