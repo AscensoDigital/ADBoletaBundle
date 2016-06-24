@@ -6,7 +6,7 @@
  * Time: 1:24
  */
 
-namespace AppBundle\DataFixtures\ORM;
+namespace AscensoDigital\BoletaBundle\DataFixtures\ORM;
 
 
 use AscensoDigital\BoletaBundle\Entity\BoletaEstado;

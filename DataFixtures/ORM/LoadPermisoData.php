@@ -6,7 +6,7 @@
  * Time: 19:36
  */
 
-namespace AscensoDigital\PerfilBundle\DataFixtures\ORM;
+namespace AscensoDigital\BoletaBundle\DataFixtures\ORM;
 
 
 use Doctrine\Common\DataFixtures\AbstractFixture;
