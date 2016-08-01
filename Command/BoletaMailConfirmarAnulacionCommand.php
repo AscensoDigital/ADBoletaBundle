@@ -2,9 +2,9 @@
 
 namespace AscensoDigital\BoletaBundle\Command;
 
-use AppBundle\Entity\BoletaEstado;
-use AppBundle\Entity\BoletaHonorario;
-use AscensoWeb\Component\Util\BoletaMailVca;
+use AscensoDigital\BoletaBundle\Entity\BoletaEstado;
+use AscensoDigital\BoletaBundle\Entity\BoletaHonorario;
+use AscensoDigital\BoletaBundle\Util\BoletaMailVca;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -18,14 +18,14 @@ use Symfony\Component\Console\Output\OutputInterface;
 class BoletaMailConfirmarAnulacionCommand extends ContainerAwareCommand {
     protected function configure() {
         $this
-            ->setName('app:boleta:vca')
+            ->setName('adboleta:mail:vca')
             ->setDescription('Procesa los correos de vca enviados por SII desde mail.')
             ->addOption('mail_id','m',InputOption::VALUE_OPTIONAL,'id email en particular',null);
     }
     
     protected function execute(InputInterface $input, OutputInterface $output) {
         $em = $this->getContainer()->get('doctrine')->getManager();
-        $bh_vca=$em->getRepository('AppBundle:BoletaEstado')->find(BoletaEstado::VCA);
+        $bh_vca=$em->getRepository('ADBoletaBundle:BoletaEstado')->find(BoletaEstado::VCA);
 
         $user = 'pagos@cgslogistica.cl';
         $password = 'pagos.2015';
@@ -62,16 +62,12 @@ class BoletaMailConfirmarAnulacionCommand extends ContainerAwareCommand {
             }
 
             /** @var BoletaHonorario $bhe */
-            $bhe=$em->getRepository('AppBundle:BoletaHonorario')->findOneWithPagoByRutNumero($rut_boleta, $boleta_numero);
+            $bhe=$em->getRepository('ADBoletaBundle:BoletaHonorario')->findOneWithPagoByRutNumero($rut_boleta, $boleta_numero);
             if(!$bhe){
                 $bhe= new BoletaHonorario();
-                $bhe->setRut($rut_boleta)
+                $bhe->setRutEmisor($rut_boleta)
                     ->setNumero($boleta_numero)
                     ->setMailId($mail_id);
-                $usuario = $em->getRepository('AppBundle:Usuario')->find(BoletaMailVca::getUsuarioId());
-                if ($usuario) {
-                    $bhe->setUsuario($usuario);
-                }
             }
             $bhe->setBoletaEstado($bh_vca)
                 ->setFechaAnulacion(is_null($fecha_anulacion) ? null : new \DateTime($fecha_anulacion));

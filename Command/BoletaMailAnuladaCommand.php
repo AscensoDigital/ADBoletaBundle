@@ -2,12 +2,9 @@
 
 namespace AscensoDigital\BoletaBundle\Command;
 
-use AppBundle\Entity\BoletaEstado;
-use AppBundle\Entity\BoletaHonorario;
-use AppBundle\Entity\PagoEstado;
-use AppBundle\Entity\UsuarioPago;
-use AppBundle\Entity\UsuarioPagoHistorico;
-use AscensoWeb\Component\Util\BoletaMailAnulada;
+use AscensoDigital\BoletaBundle\Entity\BoletaEstado;
+use AscensoDigital\BoletaBundle\Entity\BoletaHonorario;
+use AscensoDigital\BoletaBundle\Util\BoletaMailAnulada;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -21,16 +18,14 @@ use Symfony\Component\Console\Output\OutputInterface;
 class BoletaMailAnuladaCommand extends ContainerAwareCommand {
     protected function configure() {
         $this
-            ->setName('app:boleta:anulada')
+            ->setName('adboleta:mail:anulada')
             ->setDescription('Procesa los correos de boletas anuladas enviados por SII desde mail.')
             ->addOption('mail_id','m',InputOption::VALUE_OPTIONAL,'id email en particular',null);
     }
     
     protected function execute(InputInterface $input, OutputInterface $output) {
         $em = $this->getContainer()->get('doctrine')->getManager();
-        //$estados=array(PagoEstado::ENVIADO_BANCO, PagoEstado::PAGADO, PagoEstado::PAGADO_CHEQUE);
-        $pe_anulada=$em->getRepository('AppBundle:PagoEstado')->find(PagoEstado::BOLETA_ANULADA);
-        $bh_anulada=$em->getRepository('AppBundle:BoletaEstado')->find(BoletaEstado::ANULADA);
+        $bh_anulada=$em->getRepository('ADBoletaBundle:BoletaEstado')->find(BoletaEstado::ANULADA);
 
         $user = 'pagos@cgslogistica.cl';
         $password = 'pagos.2015';
@@ -64,16 +59,12 @@ class BoletaMailAnuladaCommand extends ContainerAwareCommand {
             }
 
             /** @var BoletaHonorario $bhe */
-            $bhe=$em->getRepository('AppBundle:BoletaHonorario')->findOneWithPagoByRutNumero($rut_boleta, $boleta_numero);
+            $bhe=$em->getRepository('ADBoletaBundle:BoletaHonorario')->findOneWithPagoByRutNumero($rut_boleta, $boleta_numero);
             if(!$bhe){
                 $bhe= new BoletaHonorario();
-                $bhe->setRut($rut_boleta)
+                $bhe->setRutEmisor($rut_boleta)
                     ->setNumero($boleta_numero)
-                    ->setMailId($mail_id);
-                $usuario = $em->getRepository('AppBundle:Usuario')->find(BoletaMailAnulada::getUsuarioId());
-                if ($usuario) {
-                    $bhe->setUsuario($usuario);
-                }
+                    ->setMailAnulacionId($mail_id);
             }
             else {
                 if($bhe->getArchivo()) {
@@ -93,7 +84,7 @@ class BoletaMailAnuladaCommand extends ContainerAwareCommand {
                 ->setFechaAnulacion(is_null($fecha_anulacion) ? null : new \DateTime($fecha_anulacion));
             $em->persist($bhe);
 
-            /** @var UsuarioPago $up */
+            /* TODO AGREGAR MANEJADOR DE EVENTO */
             foreach ($bhe->getUsuarioPagos() as $up) {
                 /*$uph=new UsuarioPagoHistorico();
                 $uph->setFecha(new \DateTime())

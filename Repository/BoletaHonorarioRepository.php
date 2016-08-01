@@ -36,7 +36,7 @@ class BoletaHonorarioRepository extends EntityRepository {
             ->addSelect('u.username as rut')
             ->addSelect('u.celular as celular')
             ->addSelect('archivo.id as archivo_id')
-            ->from('AppBundle:BoletaHonorario', 'bh')
+            ->from('ADBoletaBundle:BoletaHonorario', 'bh')
             ->join('bh.usuario', 'u')
             ->join('bh.boletaEstado','bhe')
             ->join('bh.archivo', 'archivo')
@@ -66,7 +66,7 @@ class BoletaHonorarioRepository extends EntityRepository {
     public function findSinAsignacion($usuario_id) {
         return $this->getEntityManager()->createQueryBuilder()
             ->select('bh')
-            ->from('AppBundle:BoletaHonorario','bh')
+            ->from('ADBoletaBundle:BoletaHonorario','bh')
             ->join('bh.boletaEstado','be', Join::WITH, 'be.vigente=:vigente')
             ->leftJoin('bh.usuarioPagos','up')
             ->where('bh.usuario=:usuario')
@@ -92,7 +92,7 @@ class BoletaHonorarioRepository extends EntityRepository {
     public function hasSinAsignacion($usuario_id) {
         $rs=$this->getEntityManager()->createQueryBuilder()
             ->select('COUNT(bh)')
-            ->from('AppBundle:BoletaHonorario','bh')
+            ->from('ADBoletaBundle:BoletaHonorario','bh')
             ->join('bh.boletaEstado','be', Join::WITH, 'be.vigente=:vigente')
             ->leftJoin('bh.usuarioPagos','up')
             ->where('bh.usuario=:usuario')

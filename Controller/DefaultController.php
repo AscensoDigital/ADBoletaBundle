@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Controller;
+namespace AscensoDigital\BoletaBundle\Controller;
 
 use AscensoDigital\BoletaBundle\Entity\BoletaHonorario;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
