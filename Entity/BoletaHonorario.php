@@ -196,6 +196,10 @@ class BoletaHonorario
     }
 
 
+    public function isShow($can){
+        return true===$can && strlen($this->getRutaArchivo())>0;
+    }
+
     /**
      * Get id
      *
