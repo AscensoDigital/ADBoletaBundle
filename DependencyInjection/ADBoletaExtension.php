@@ -3,6 +3,7 @@
 namespace AscensoDigital\BoletaBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Extension\PrependExtensionInterface;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
@@ -13,7 +14,7 @@ use Symfony\Component\HttpKernel\DependencyInjection\Extension;
  * Date: 20-01-16
  * Time: 19:18
  */
-class ADBoletaExtension extends Extension
+class ADBoletaExtension extends Extension implements PrependExtensionInterface
 {
     /**
      * {@inheritDoc}
@@ -31,5 +32,16 @@ class ADBoletaExtension extends Extension
     public function getAlias()
     {
         return 'ad_boleta';
+    }
+
+    /**
+     * Allow an extension to prepend the extension configurations.
+     *
+     * @param ContainerBuilder $container
+     */
+    public function prepend(ContainerBuilder $container)
+    {
+        $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader->load('ad_boleta.easyadmin.yml');
     }
 }

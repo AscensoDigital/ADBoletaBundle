@@ -94,31 +94,11 @@ class BoletaHonorarioRepository extends EntityRepository {
             ->select('COUNT(bh)')
             ->from('ADBoletaBundle:BoletaHonorario','bh')
             ->join('bh.boletaEstado','be', Join::WITH, 'be.vigente=:vigente')
-            ->leftJoin('bh.usuarioPagos','up')
             ->where('bh.usuario=:usuario')
-            ->andWhere('up.id IS NULL')
+            ->andWhere('bh.proyectoKey IS NULL')
             ->setParameter(':usuario',$usuario_id)
             ->setParameter(':vigente','true')
             ->getQuery()->getSingleScalarResult();
         return $rs>0;
-    }
-
-    public function getReporteInternoBoletaEstado($be_id){
-        $sql="WITH ".SubQuery::PagoEstadoLast();
-        $sql.=" SELECT DISTINCT p.region_id, ce.nombre, bh.rut, CASE WHEN u.id is null THEN ' ' ELSE u.nombres || ' ' || u.apellido_paterno || ' ' || u.apellido_materno END as nombres, u.celular, u.email, bh.numero as numero_boleta,  bh.monto, bh.monto_impuesto, bh.monto_liquido,
-              bh.fecha_boleta_str as fecha_boleta, bh.fecha_emision, bh.glosa, bh.fecha_anulacion, pe.nombre as estado_pago
-            FROM boleta_honorario bh
-            LEFT JOIN usuario u ON bh.usuario_id = u.id
-            LEFT JOIN comuna c ON u.comuna_id = c.id
-            LEFT JOIN provincia p ON c.provincia_id = p.id
-            LEFT JOIN usuario_pago up ON bh.id=up.boleta_honorario_id
-            LEFT JOIN pago_estado_last pel ON up.id=pel.up_id
-            LEFT JOIN usuario_pago_historico uph ON up.id = uph.usuario_pago_id AND pel.fecha=uph.fecha
-            LEFT JOIN pago_estado pe ON uph.pago_estado_id = pe.id
-            LEFT JOIN usuario_x_pagar uxp ON up.id = uxp.usuario_pago_id
-            LEFT JOIN centro ce ON uxp.centro_id = ce.id
-            WHERE bh.boleta_estado_id=".$be_id;
-        $conn=$this->getEntityManager()->getConnection();
-        return $conn->fetchAll($sql);
     }
 }

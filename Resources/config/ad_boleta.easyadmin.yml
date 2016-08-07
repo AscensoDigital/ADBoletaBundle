@@ -1,0 +1,6 @@
+easy_admin:
+    entities:
+        BoletaEstado:
+            class: AscensoDigital\BoletaBundle\Entity\BoletaEstado
+        Empresa:
+            class: AscensoDigital\BoletaBundle\Entity\Empresa
