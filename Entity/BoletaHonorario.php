@@ -9,8 +9,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * BoletaHonorario
  *
- * @ORM\Table(name="ad_boleta_boleta_honorario")
- * @ORM\Entity(repositoryClass="AscensoDigital\BoletaBundle\Repository\BoletaHonorarioRepository")
  */
 class BoletaHonorario
 {
@@ -156,13 +154,6 @@ class BoletaHonorario
      * @ORM\Column(name="mail_anulacion_id", type="integer", nullable=true)
      */
     protected $mailAnulacionId;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="cargador_id", type="integer", nullable=true)
-     */
-    protected $cargadorId;
 
     /**
      * @var BoletaEstado
