@@ -187,7 +187,7 @@ class BoletaHonorario
     /**
      * @var UserInterface
      *
-     * @ORM\ManyToOne(targetEntity="UserInterface")
+     * @ORM\ManyToOne(targetEntity="\AscensoDigital\BoletaBundle\Model\UserInterface")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="usuario_id", referencedColumnName="id")
      * })
@@ -197,7 +197,7 @@ class BoletaHonorario
     /**
      * @var UserInterface
      *
-     * @ORM\ManyToOne(targetEntity="UserInterface")
+     * @ORM\ManyToOne(targetEntity="\AscensoDigital\BoletaBundle\Model\UserInterface")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="cargador_id", referencedColumnName="id")
      * })
