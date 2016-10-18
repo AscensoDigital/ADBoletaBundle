@@ -15,11 +15,9 @@ use Doctrine\ORM\Query\Expr\Join;
 class BoletaHonorarioRepository extends EntityRepository {
 
     public function findSinAsignacion($usuario_id) {
-        return $this->getEntityManager()->createQueryBuilder()
-            ->select('bh')
-            ->from('ADBoletaBundle:BoletaHonorario','bh')
+        return $this->createQueryBuilder('bh')
             ->join('bh.boletaEstado','be', Join::WITH, 'be.vigente=:vigente')
-            ->where('bh.usuarioId=:usuario')
+            ->where('bh.usuario=:usuario')
             ->andWhere('bh.proyectoKey IS NULL')
             ->setParameter(':usuario',$usuario_id)
             ->setParameter(':vigente','true')
@@ -27,11 +25,10 @@ class BoletaHonorarioRepository extends EntityRepository {
     }
 
     public function hasSinAsignacion($usuario_id) {
-        $rs=$this->getEntityManager()->createQueryBuilder()
+        $rs=$this->createQueryBuilder('bh')
             ->select('COUNT(bh)')
-            ->from('ADBoletaBundle:BoletaHonorario','bh')
             ->join('bh.boletaEstado','be', Join::WITH, 'be.vigente=:vigente')
-            ->where('bh.usuarioId=:usuario')
+            ->where('bh.usuario=:usuario')
             ->andWhere('bh.proyectoKey IS NULL')
             ->setParameter(':usuario',$usuario_id)
             ->setParameter(':vigente','true')
