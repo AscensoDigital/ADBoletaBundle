@@ -156,9 +156,9 @@ abstract class BoletaHonorario
     protected $mailAnulacionId;
 
     /**
-     * @var BoletaEstado
+     * @var \AscensoDigital\BoletaBundle\Entity\BoletaEstado
      *
-     * @ORM\ManyToOne(targetEntity="BoletaEstado")
+     * @ORM\ManyToOne(targetEntity="\AscensoDigital\BoletaBundle\Entity\BoletaEstado")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="boleta_estado_id", referencedColumnName="id")
      * })
@@ -166,9 +166,9 @@ abstract class BoletaHonorario
     protected $boletaEstado;
 
     /**
-     * @var Empresa
+     * @var \AscensoDigital\BoletaBundle\Entity\Empresa
      *
-     * @ORM\ManyToOne(targetEntity="Empresa")
+     * @ORM\ManyToOne(targetEntity="\AscensoDigital\BoletaBundle\Entity\Empresa")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="empresa_id", referencedColumnName="id")
      * })
@@ -400,12 +400,12 @@ abstract class BoletaHonorario
     }
 
     /**
-     * Set boletaEstado
+     * Set \AscensoDigital\BoletaBundle\Entity\boletaEstado
      *
-     * @param BoletaEstado $boletaEstado
+     * @param \AscensoDigital\BoletaBundle\Entity\BoletaEstado $boletaEstado
      * @return BoletaHonorario
      */
-    public function setBoletaEstado(BoletaEstado $boletaEstado = null)
+    public function setBoletaEstado(\AscensoDigital\BoletaBundle\Entity\BoletaEstado $boletaEstado = null)
     {
         $this->boletaEstado = $boletaEstado;
 
@@ -415,7 +415,7 @@ abstract class BoletaHonorario
     /**
      * Get boletaEstado
      *
-     * @return BoletaEstado 
+     * @return \AscensoDigital\BoletaBundle\Entity\BoletaEstado
      */
     public function getBoletaEstado()
     {
@@ -592,17 +592,17 @@ abstract class BoletaHonorario
     }
 
     /**
-     * @param Empresa $empresa
+     * @param \AscensoDigital\BoletaBundle\Entity\Empresa $empresa
      * @return BoletaHonorario
      */
-    public function setEmpresa($empresa)
+    public function setEmpresa(\AscensoDigital\BoletaBundle\Entity\Empresa $empresa)
     {
         $this->empresa = $empresa;
         return $this;
     }
 
     /**
-     * @return Empresa
+     * @return \AscensoDigital\BoletaBundle\Entity\Empresa
      */
     public function getEmpresa()
     {
