@@ -2,6 +2,7 @@
 
 namespace AscensoDigital\BoletaBundle\Entity;
 
+use AscensoDigital\BoletaBundle\Model\UserInterface;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -11,7 +12,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="ad_boleta_boleta_honorario")
  * @ORM\Entity(repositoryClass="AscensoDigital\BoletaBundle\Repository\BoletaHonorarioRepository")
  */
-class BoletaHonorario
+abstract class BoletaHonorario
 {
     /**
      * @var integer
@@ -51,13 +52,6 @@ class BoletaHonorario
      * @ORM\Column(name="proyecto_key", type="string", length=255, nullable=true)
      */
     protected $proyectoKey;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="usuario_id", type="integer", nullable=true)
-     */
-    protected $usuarioId;
 
     /**
      * @var integer
@@ -190,6 +184,27 @@ class BoletaHonorario
      */
     protected $empresa;
 
+    /**
+     * @var UserInterface
+     *
+     * @ORM\ManyToOne(targetEntity="UserInterface")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="usuario_id", referencedColumnName="id")
+     * })
+     */
+    protected $usuario;
+
+    /**
+     * @var UserInterface
+     *
+     * @ORM\ManyToOne(targetEntity="UserInterface")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="cargador_id", referencedColumnName="id")
+     * })
+     */
+    protected $cargador;
+
+
 
     public function isInvalidPdf(){
         return $this->getBoletaEstado()->getId()==BoletaEstado::PDF_INVALIDO;
@@ -242,8 +257,6 @@ class BoletaHonorario
     public function setRutEmisor($rut)
     {
         $this->rutEmisor = str_replace('.','',$rut);
-        $rutArr=explode('-',$this->rutEmisor);
-        $this->setUsuarioId(isset($rutArr[0]) ? $rutArr[0] : null);
         return $this;
     }
 
@@ -419,29 +432,6 @@ class BoletaHonorario
     }
 
     /**
-     * Set usuarioId
-     *
-     * @param integer $usuarioId
-     * @return BoletaHonorario
-     */
-    public function setUsuarioId($usuarioId = null)
-    {
-        $this->usuarioId = $usuarioId;
-
-        return $this;
-    }
-
-    /**
-     * Get usuarioId
-     *
-     * @return integer
-     */
-    public function getUsuarioId()
-    {
-        return $this->usuarioId;
-    }
-
-    /**
      * Set fechaEnvio
      *
      * @param \DateTime $fechaEnvio
@@ -557,29 +547,6 @@ class BoletaHonorario
     }
 
     /**
-     * Set cargadorId
-     *
-     * @param integer $cargadorId
-     * @return BoletaHonorario
-     */
-    public function setCargadorId($cargadorId = null)
-    {
-        $this->cargadorId = $cargadorId;
-
-        return $this;
-    }
-
-    /**
-     * Get cargadorId
-     *
-     * @return integer
-     */
-    public function getCargadorId()
-    {
-        return $this->cargadorId;
-    }
-
-    /**
      * @param string $proyectoKey
      * @return BoletaHonorario
      */
@@ -649,5 +616,41 @@ class BoletaHonorario
     public function getEmpresa()
     {
         return $this->empresa;
+    }
+
+    /**
+     * @param UserInterface $usuario
+     * @return BoletaHonorario
+     */
+    public function setUsuario($usuario)
+    {
+        $this->usuario = $usuario;
+        return $this;
+    }
+
+    /**
+     * @return UserInterface
+     */
+    public function getUsuario()
+    {
+        return $this->usuario;
+    }
+
+    /**
+     * @param UserInterface $cargador
+     * @return BoletaHonorario
+     */
+    public function setCargador($cargador)
+    {
+        $this->cargador = $cargador;
+        return $this;
+    }
+
+    /**
+     * @return UserInterface
+     */
+    public function getCargador()
+    {
+        return $this->cargador;
     }
 }
