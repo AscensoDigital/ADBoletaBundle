@@ -12,7 +12,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="ad_boleta_boleta_honorario")
  * @ORM\Entity(repositoryClass="AscensoDigital\BoletaBundle\Repository\BoletaHonorarioRepository")
  */
-abstract class BoletaHonorario
+class BoletaHonorario
 {
     /**
      * @var integer
