@@ -10,7 +10,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * BoletaHonorario
  *
  */
-class BoletaHonorario
+abstract class BoletaHonorario
 {
     /**
      * @var integer
