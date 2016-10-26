@@ -32,7 +32,7 @@ class BoletaMailVigenteCommand extends ContainerAwareCommand
             ->addArgument('user',InputArgument::REQUIRED,'Cuenta de email a leer')
             ->addArgument('password',InputArgument::REQUIRED,'Password cuenta de email a leer')
             ->addOption('mail_id','m',InputOption::VALUE_OPTIONAL,'id email en particular',null)
-            ->addOption('status','e',InputOption::VALUE_NONE,'mostrar barra de avance');
+            ->addOption('status','t',InputOption::VALUE_NONE,'mostrar barra de avance');
     }
 
     /**
