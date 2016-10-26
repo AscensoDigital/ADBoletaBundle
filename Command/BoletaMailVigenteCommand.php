@@ -51,6 +51,7 @@ class BoletaMailVigenteCommand extends ContainerAwareCommand
 
         $bhe_vigente=$em->getRepository('ADBoletaBundle:BoletaEstado')->find(BoletaEstado::VIGENTE);
         $bhe_invalid=$em->getRepository('ADBoletaBundle:BoletaEstado')->find(BoletaEstado::PDF_INVALIDO);
+        $bhe_anular=$em->getRepository('ADBoletaBundle:BoletaEstado')->find(BoletaEstado::ANULAR);
         //$user = 'consultas@ennea.cl';
         //$password = 'ennea.2014';
 
@@ -107,7 +108,7 @@ class BoletaMailVigenteCommand extends ContainerAwareCommand
             $this->existPath($this->getContainer()->getParameter('ad_boleta_ruta_boletas'). DIRECTORY_SEPARATOR . $empresa->getSlug());
             //$output->writeln(' Buscando Boleta '.$boleta_numero.' RUT: '.$rut_boleta);
             /** @var BoletaHonorario $bhe */
-            $bhe=$em->getRepository('ADBoletaBundle:BoletaHonorario')->findOneBy(array('rutEmisor' => $rut_boleta, 'numero' => $boleta_numero));
+            $bhe=$bh_manager->findBoletaHonorarioBy(array('rutEmisor' => $rut_boleta, 'numero' => $boleta_numero));
             if(!$bhe or $bhe->isInvalidPdf()) {
                 if(!$bhe){
                     $bhe = $bh_manager->createBoletaHonorario();
@@ -180,6 +181,9 @@ class BoletaMailVigenteCommand extends ContainerAwareCommand
                             }
                         }
                     }
+                }
+                if($bhe->isInvalidFecha()){
+                    $bhe->setBoletaEstado($bhe_anular);
                 }
                 $em->persist($bhe);
                 $em->flush();

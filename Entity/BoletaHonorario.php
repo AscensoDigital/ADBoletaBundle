@@ -195,7 +195,13 @@ abstract class BoletaHonorario
      */
     protected $cargador;
 
-
+    public function isInvalidFecha(){
+        if(is_null($this->getFechaBoleta()) || is_null($this->getFechaEmision())){
+            return false;
+        }
+        $fecha= clone $this->getFechaEmision();
+        return ($this->getFechaBoleta()->format('m')!=$this->getFechaEmision()->format('m') && $fecha->diff($this->getFechaBoleta())->format('%a')>15);
+    }
 
     public function isInvalidPdf(){
         return $this->getBoletaEstado()->getId()==BoletaEstado::PDF_INVALIDO;
