@@ -5,7 +5,7 @@ namespace AscensoDigital\BoletaBundle\Command;
 use AscensoDigital\BoletaBundle\Entity\BoletaEstado;
 use AscensoDigital\BoletaBundle\Entity\BoletaHonorario;
 use AscensoDigital\BoletaBundle\Entity\Empresa;
-use AscensoDigital\BoletaBundle\Model\BoletaHonorarioManager;
+use AscensoDigital\BoletaBundle\Doctrine\BoletaHonorarioManager;
 use AscensoDigital\BoletaBundle\Service\BoletaService;
 use AscensoDigital\BoletaBundle\Service\EmailReaderService;
 use AscensoDigital\BoletaBundle\Util\BoletaMailEmision;
