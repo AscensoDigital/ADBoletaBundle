@@ -2,25 +2,27 @@
 
 namespace AscensoDigital\BoletaBundle\Controller;
 
-use AscensoDigital\BoletaBundle\Entity\BoletaHonorario;
+use AscensoDigital\BoletaBundle\Doctrine\BoletaHonorarioManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class DefaultController extends Controller
 {
     /**
-     * @param BoletaHonorario $bhe
-     * @return Response
+     * @param $id
+     * @return BinaryFileResponse
      * @Route("/bhe/download/{id}", name="ad_boleta_download")
      * @Security("is_granted('permiso','ad_boleta-download')")
      */
-    public function downloadAction(BoletaHonorario $bhe)
-    {
+    public function downloadAction($id) {
+        /** @var BoletaHonorarioManager $bh_manager */
+        $bh_manager=$this->get('ad_boleta.boleta_honorario_manager');
+        $bhe=$bh_manager->findBoletaHonorarioBy(['id' => $id]);
+
         if(is_null($bhe)){
             throw new NotFoundHttpException('Boleta de Honorario No encontrada');
         }
