@@ -18,6 +18,7 @@ class BoletaEstado
     const PDF_INVALIDO = 4;
     const VCA_VIGENTE = 5;
     const VCA_ANULADA = 6;
+    const ANULAR = 7;
 
     /**
      * @var integer
