@@ -63,6 +63,13 @@ class LoadBoletaEstadoData extends AbstractFixture implements OrderedFixtureInte
         $vcaa->setNombre('V.C.A. Anulada')
             ->setVigente(false);
         $manager->persist($vcaa);
+
+
+        $eliminar= new BoletaEstado();
+        $eliminar->setNombre('Anular - Eliminar')
+            ->setVigente(false);
+        $manager->persist($eliminar);
+
         $manager->flush();
     }
 }
