@@ -10,7 +10,7 @@ use Doctrine\ORM\EntityManager;
  *
  * @author claudio
  */
-class BoletaManager {
+class BoletaService {
     /**
      * @var EntityManager
      */

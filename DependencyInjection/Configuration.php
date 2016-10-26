@@ -23,6 +23,7 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->scalarNode('ruta_boletas')->cannotBeEmpty()->isRequired()->end()
+            ->scalarNode('boleta_class')->isRequired()->cannotBeEmpty()->end()
                 /*->arrayNode('database')
                     ->addDefaultsIfNotSet()
                     ->children()

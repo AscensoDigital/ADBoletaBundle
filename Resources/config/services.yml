@@ -11,8 +11,14 @@ services:
       class: AscensoDigital\BoletaBundle\Service\XpdfService
       arguments: ["@?logger"]
 
-  ad_boleta.boleta_manager:
-      class: AscensoDigital\BoletaBundle\Service\BoletaManager
+  ad_boleta.boleta_honorario_manager:
+        class: AscensoDigital\BoletaBundle\Doctrine\BoletaHonorarioManager
+        arguments:
+          - '@doctrine.orm.entity_manager'
+          - "%ad_boleta.boleta_class%"
+
+  ad_boleta.boleta_service:
+      class: AscensoDigital\BoletaBundle\Service\BoletaService
       arguments: ["@ad_boleta.xpdf", "@doctrine.orm.entity_manager"]
 
   ad_boleta.email_reader:

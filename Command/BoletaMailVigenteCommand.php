@@ -5,6 +5,7 @@ namespace AscensoDigital\BoletaBundle\Command;
 use AscensoDigital\BoletaBundle\Entity\BoletaEstado;
 use AscensoDigital\BoletaBundle\Entity\BoletaHonorario;
 use AscensoDigital\BoletaBundle\Entity\Empresa;
+use AscensoDigital\BoletaBundle\Model\BoletaHonorarioManager;
 use AscensoDigital\BoletaBundle\Service\BoletaManager;
 use AscensoDigital\BoletaBundle\Service\EmailReaderService;
 use AscensoDigital\BoletaBundle\Util\BoletaMailEmision;
@@ -42,10 +43,12 @@ class BoletaMailVigenteCommand extends ContainerAwareCommand
         $em = $this->getContainer()->get('doctrine')->getManager();
         
         /** @var BoletaManager $boleta_srv */
-        $boleta_srv= $this->getContainer()->get('ad_boleta.boleta_manager');
+        $boleta_srv= $this->getContainer()->get('ad_boleta.boleta_service');
         /** @var EmailReaderService $email_reader */
         $email_reader=$this->getContainer()->get('ad_boleta.email_reader');
-        
+        /** @var BoletaHonorarioManager $bh_manager */
+        $bh_manager=$this->getContainer()->get('ad_boleta.boleta_honorario_manager');
+
         $bhe_vigente=$em->getRepository('ADBoletaBundle:BoletaEstado')->find(BoletaEstado::VIGENTE);
         $bhe_invalid=$em->getRepository('ADBoletaBundle:BoletaEstado')->find(BoletaEstado::PDF_INVALIDO);
         //$user = 'consultas@ennea.cl';
@@ -107,7 +110,7 @@ class BoletaMailVigenteCommand extends ContainerAwareCommand
             $bhe=$em->getRepository('ADBoletaBundle:BoletaHonorario')->findOneBy(array('rutEmisor' => $rut_boleta, 'numero' => $boleta_numero));
             if(!$bhe or $bhe->isInvalidPdf()) {
                 if(!$bhe){
-                    $bhe= new BoletaHonorario();
+                    $bhe = $bh_manager->createBoletaHonorario();
                 }
                 try {
                     $fecha_envio=BoletaMailEmision::getFechaEnvioEstandar();
