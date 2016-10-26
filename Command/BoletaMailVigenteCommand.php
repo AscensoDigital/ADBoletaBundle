@@ -6,7 +6,7 @@ use AscensoDigital\BoletaBundle\Entity\BoletaEstado;
 use AscensoDigital\BoletaBundle\Entity\BoletaHonorario;
 use AscensoDigital\BoletaBundle\Entity\Empresa;
 use AscensoDigital\BoletaBundle\Model\BoletaHonorarioManager;
-use AscensoDigital\BoletaBundle\Service\BoletaManager;
+use AscensoDigital\BoletaBundle\Service\BoletaService;
 use AscensoDigital\BoletaBundle\Service\EmailReaderService;
 use AscensoDigital\BoletaBundle\Util\BoletaMailEmision;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -42,7 +42,7 @@ class BoletaMailVigenteCommand extends ContainerAwareCommand
         /** @var ObjectManager $em */
         $em = $this->getContainer()->get('doctrine')->getManager();
         
-        /** @var BoletaManager $boleta_srv */
+        /** @var BoletaService $boleta_srv */
         $boleta_srv= $this->getContainer()->get('ad_boleta.boleta_service');
         /** @var EmailReaderService $email_reader */
         $email_reader=$this->getContainer()->get('ad_boleta.email_reader');
