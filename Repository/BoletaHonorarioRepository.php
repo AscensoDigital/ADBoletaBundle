@@ -17,7 +17,7 @@ class BoletaHonorarioRepository extends EntityRepository {
     public function findSinAsignacion($usuario_id) {
         return $this->createQueryBuilder('bh')
             ->join('bh.boletaEstado','be', Join::WITH, 'be.vigente=:vigente')
-            ->where('bh.usuario=:usuario')
+            ->where('bh.rutEmisor=:usuario')
             ->andWhere('bh.proyectoKey IS NULL')
             ->setParameter(':usuario',$usuario_id)
             ->setParameter(':vigente','true')
@@ -28,7 +28,7 @@ class BoletaHonorarioRepository extends EntityRepository {
         $rs=$this->createQueryBuilder('bh')
             ->select('COUNT(bh)')
             ->join('bh.boletaEstado','be', Join::WITH, 'be.vigente=:vigente')
-            ->where('bh.usuario=:usuario')
+            ->where('bh.rutEmisor=:usuario')
             ->andWhere('bh.proyectoKey IS NULL')
             ->setParameter(':usuario',$usuario_id)
             ->setParameter(':vigente','true')
