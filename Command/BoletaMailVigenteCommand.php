@@ -39,19 +39,7 @@ class BoletaMailVigenteCommand extends ContainerAwareCommand
      * {@inheritdoc}
      */
     protected function execute(InputInterface $input, OutputInterface $output) {
-        /** @var ObjectManager $em */
-        $em = $this->getContainer()->get('doctrine')->getManager();
-        
-        /** @var BoletaService $boleta_srv */
-        $boleta_srv= $this->getContainer()->get('ad_boleta.boleta_service');
-        /** @var EmailReaderService $email_reader */
-        $email_reader=$this->getContainer()->get('ad_boleta.email_reader');
-        /** @var BoletaHonorarioManager $bh_manager */
-        $bh_manager=$this->getContainer()->get('ad_boleta.boleta_honorario_manager');
 
-        $bhe_vigente=$em->getRepository('ADBoletaBundle:BoletaEstado')->find(BoletaEstado::VIGENTE);
-        $bhe_invalid=$em->getRepository('ADBoletaBundle:BoletaEstado')->find(BoletaEstado::PDF_INVALIDO);
-        $bhe_anular=$em->getRepository('ADBoletaBundle:BoletaEstado')->find(BoletaEstado::ANULAR);
         //$user = 'consultas@ennea.cl';
         //$password = 'ennea.2014';
 
@@ -75,12 +63,31 @@ class BoletaMailVigenteCommand extends ContainerAwareCommand
             imap_close($conn);
             return;
         }
+
+        /** @var ObjectManager $em */
+        $em = $this->getContainer()->get('doctrine')->getManager();
+
+        /** @var BoletaService $boleta_srv */
+        $boleta_srv= $this->getContainer()->get('ad_boleta.boleta_service');
+        /** @var EmailReaderService $email_reader */
+        $email_reader=$this->getContainer()->get('ad_boleta.email_reader');
+        /** @var BoletaHonorarioManager $bh_manager */
+        $bh_manager=$this->getContainer()->get('ad_boleta.boleta_honorario_manager');
+
+        $bhe_vigente=$em->getRepository('ADBoletaBundle:BoletaEstado')->find(BoletaEstado::VIGENTE);
+        $bhe_invalid=$em->getRepository('ADBoletaBundle:BoletaEstado')->find(BoletaEstado::PDF_INVALIDO);
+        $bhe_anular=$em->getRepository('ADBoletaBundle:BoletaEstado')->find(BoletaEstado::ANULAR);
+
         $tot=count($vigentes);
         if($input->getOption('status')) {
             $output->writeln('Se revisarán ' . $tot . ' correos');
             $progressBar= new ProgressBar($output,$tot);
             $progressBar->setFormat(' %current%/%max% [%bar%] %percent:3s%% %elapsed:6s%/%estimated:-6s% %memory:6s%');
         }
+        else {
+            $progressBar=null;
+        }
+
         $cont=0;
         foreach ($vigentes as $email) {
             $contenidos=$email_reader->getContenido($conn,$email);

@@ -89,27 +89,4 @@ class BoletaHonorarioManager
     {
         return $this->repository;
     }
-
-
-    /**
-     * {@inheritdoc}
-     */
-    public function reloadUser(UserInterface $user)
-    {
-        $this->objectManager->refresh($user);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function updateUser(UserInterface $user, $andFlush = true)
-    {
-        $this->updateCanonicalFields($user);
-        $this->updatePassword($user);
-
-        $this->objectManager->persist($user);
-        if ($andFlush) {
-            $this->objectManager->flush();
-        }
-    }
 }

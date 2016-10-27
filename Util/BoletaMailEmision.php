@@ -11,12 +11,12 @@ namespace AscensoDigital\BoletaBundle\Util;
 
 class BoletaMailEmision
 {
-    private static $msg;
-    private static $rutEmisor;
-    private static $numeroBoleta;
-    private static $fechaEnvio;
-    private static $fechaBoleta;
-    private static $razonSocial;
+    protected static $msg;
+    protected static $rutEmisor;
+    protected static $numeroBoleta;
+    protected static $fechaEnvio;
+    protected static $fechaBoleta;
+    protected static $razonSocial;
 
     public static function loadMsg($msg){
         self::$msg=$msg;

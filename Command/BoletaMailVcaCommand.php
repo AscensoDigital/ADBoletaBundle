@@ -2,14 +2,12 @@
 
 namespace AscensoDigital\BoletaBundle\Command;
 
-use AscensoDigital\BoletaBundle\ADBoletaEvents;
 use AscensoDigital\BoletaBundle\Doctrine\BoletaHonorarioManager;
 use AscensoDigital\BoletaBundle\Entity\BoletaEstado;
 use AscensoDigital\BoletaBundle\Entity\BoletaHonorario;
 use AscensoDigital\BoletaBundle\Entity\Empresa;
-use AscensoDigital\BoletaBundle\Event\BoletaHonorarioEvent;
 use AscensoDigital\BoletaBundle\Service\EmailReaderService;
-use AscensoDigital\BoletaBundle\Util\BoletaMailAnulada;
+use AscensoDigital\BoletaBundle\Util\BoletaMailVca;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Helper\ProgressBar;
@@ -19,15 +17,15 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Description of boletaMailAnuladaCommand
+ * Description of boletaMailVcaCommand
  *
  * @author claudio
  */
-class BoletaMailAnuladaCommand extends ContainerAwareCommand {
+class BoletaMailVcaCommand extends ContainerAwareCommand {
     protected function configure() {
         $this
-            ->setName('adboleta:mail:anulada')
-            ->setDescription('Procesa los correos de boletas anuladas enviados por SII desde mail.')
+            ->setName('adboleta:mail:vca')
+            ->setDescription('Procesa los correos de vca enviados por SII desde mail.')
             ->addArgument('user',InputArgument::REQUIRED,'Cuenta de email a leer')
             ->addArgument('password',InputArgument::REQUIRED,'Password cuenta de email a leer')
             ->addOption('mail_id','m',InputOption::VALUE_OPTIONAL,'id email en particular',null)
@@ -35,7 +33,6 @@ class BoletaMailAnuladaCommand extends ContainerAwareCommand {
     }
     
     protected function execute(InputInterface $input, OutputInterface $output) {
-
         $user = $input->getArgument('user');#'pagos@cgslogistica.cl';
         $password = $input->getArgument('password');#'pagos.2015';
         $mailbox = "{imap.gmail.com:993/imap/ssl}INBOX";
@@ -43,29 +40,26 @@ class BoletaMailAnuladaCommand extends ContainerAwareCommand {
         $conn=imap_open($mailbox , $user , $password) or die('Cannot connect to Gmail: ' . imap_last_error());
 
         if(is_null($input->getOption('mail_id'))){
-            $anulados = imap_search($conn, 'SUBJECT "Anulada" UNSEEN', SE_UID);
-            //$anulados = imap_search($conn, 'SUBJECT "Anulada"', SE_UID);
+            $anulados = imap_search($conn, 'SUBJECT "Solicitud de Anulacion" UNSEEN', SE_UID);
+            //$anulados = imap_search($conn, 'SUBJECT "Solicitud de Anulacion"', SE_UID);
         }
         else {
             $anulados=array($input->getOption('mail_id'));
         }
         if(!$anulados) {
-            imap_close($conn); 
+            imap_close($conn);
             return;
         }
         $tot=count($anulados);
 
         /** @var ObjectManager $em */
         $em = $this->getContainer()->get('doctrine')->getManager();
-
-        $bh_anulada=$em->getRepository('ADBoletaBundle:BoletaEstado')->find(BoletaEstado::ANULADA);
+        $bh_vca=$em->getRepository('ADBoletaBundle:BoletaEstado')->find(BoletaEstado::VCA);
 
         /** @var EmailReaderService $email_reader */
         $email_reader=$this->getContainer()->get('ad_boleta.email_reader');
         /** @var BoletaHonorarioManager $bh_manager */
         $bh_manager=$this->getContainer()->get('ad_boleta.boleta_honorario_manager');
-
-        $path_base=$this->getContainer()->getParameter('ad_boleta_ruta_boletas'). DIRECTORY_SEPARATOR;
 
         if($input->getOption('status')) {
             $output->writeln('Se revisarán ' . $tot . ' correos');
@@ -75,11 +69,7 @@ class BoletaMailAnuladaCommand extends ContainerAwareCommand {
         else {
             $progressBar=null;
         }
-        /** @var $dispatcher \Symfony\Component\EventDispatcher\EventDispatcherInterface */
-        $dispatcher = $this->getContainer()->get('event_dispatcher');
 
-        $particion = round($tot/20) ? round($tot/20) : 20;
-        $cont=0;
         foreach ($anulados as $mail_id) {
             $contenidos=$email_reader->getContenido($conn,$mail_id);
             if(!isset($contenidos['plain'][0])) {
@@ -89,11 +79,11 @@ class BoletaMailAnuladaCommand extends ContainerAwareCommand {
             else {
                 $email_body=$contenidos['plain'][0]['plain'];
             }
-            BoletaMailAnulada::loadMsg($email_body);
-            $rut_boleta=BoletaMailAnulada::getRutEmisor();
-            $boleta_numero=BoletaMailAnulada::getNumeroBoleta();
-            $fecha_anulacion = BoletaMailAnulada::getFechaAnulacionEstandar();
-            $razon_social=BoletaMailAnulada::getRazonSocial();
+            BoletaMailVca::loadMsg($email_body);
+            $rut_boleta=BoletaMailVca::getRutEmisor();
+            $boleta_numero=BoletaMailVca::getNumeroBoleta();
+            $fecha_anulacion = BoletaMailVca::getFechaAnulacionEstandar();
+            $razon_social=BoletaMailVca::getRazonSocial();
             if(is_null($rut_boleta) or is_null($boleta_numero) or is_null($razon_social)){
                 $output->writeln($mail_id.' Correo invalido boleta:'.$boleta_numero.' RUT: '.$rut_boleta.' Razon Social: '.$razon_social);
                 continue;
@@ -108,45 +98,20 @@ class BoletaMailAnuladaCommand extends ContainerAwareCommand {
             /** @var BoletaHonorario $bhe */
             $bhe=$bh_manager->findBoletaHonorarioBy(['rutEmisor' => $rut_boleta, 'numero' => $boleta_numero]);
             if(!$bhe){
-                $bhe= $bh_manager->createBoletaHonorario();
+                $bhe = $bh_manager->createBoletaHonorario();
                 $bhe->setRutEmisor($rut_boleta)
                     ->setNumero($boleta_numero);
             }
-            else {
-                if(0 < strlen($bhe->getRutaArchivo())) {
-                    $pdf_vigente = $bhe->getRutaArchivo();
-                    if (file_exists($path_base.$pdf_vigente)) {
-                        $path = explode('/', $pdf_vigente);
-                        $pdf_anulada = $path[0] . '/anulada/' . $path[1];
-                        if (rename($path_base.$pdf_vigente, $path_base.$pdf_anulada)) {
-                            $bhe->setRutaArchivo($pdf_anulada);
-                        }
-                    }
-                }
-            }
-            $bhe->setBoletaEstado($bh_anulada)
+            $bhe->setBoletaEstado($bh_vca)
                 ->setMailAnulacionId($mail_id)
                 ->setFechaAnulacion(is_null($fecha_anulacion) ? null : new \DateTime($fecha_anulacion));
             $em->persist($bhe);
-
-            $event = new BoletaHonorarioEvent($bhe);
-            $dispatcher->dispatch(ADBoletaEvents::MAIL_ANULADA_SUCCESS, $event);
-
-            if (0 < count($event->getModificados())) {
-                foreach ($event->getModificados() as $obj) {
-                    $em->persist($obj);
-                }
-            }
-
-            if(($cont % $particion) == 0) {
-                $em->flush();
-            }
+            $em->flush();
             if($input->getOption('status')) {
                 $progressBar->advance();
             }
-            $cont++;
         }
-        $em->flush();
+        //close the stream
         imap_close($conn);
         if($input->getOption('status')) {
             $progressBar->finish();
