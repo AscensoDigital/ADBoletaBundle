@@ -100,6 +100,7 @@ class BoletaMailVcaCommand extends ContainerAwareCommand {
             if(!$bhe){
                 $bhe = $bh_manager->createBoletaHonorario();
                 $bhe->setRutEmisor($rut_boleta)
+                    ->setEmpresa($empresa)
                     ->setNumero($boleta_numero);
             }
             $bhe->setBoletaEstado($bh_vca)
