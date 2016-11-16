@@ -30,7 +30,15 @@ class LoadPermisoData extends AbstractFixture implements OrderedFixtureInterface
             $bh_download->setNombre('ad_boleta-download')->setDescripcion('Descargar Boleta de Honorarios BoletaBundle');
             $manager->persist($bh_download);
         }
-        $this->addReference('per-bh-download',$bh_download);
+        $this->addReference('ad_boleta_per-bh-download',$bh_download);
+
+        $bh_load_resumen=$manager->getRepository('ADPerfilBundle:Permiso')->findOneBy(['nombre' => 'ad_boleta-load-resumen-bhe-sii']);
+        if(!$bh_load_resumen) {
+            $bh_load_resumen = new Permiso();
+            $bh_load_resumen->setNombre('ad_boleta-load-resumen-bhe-sii')->setDescripcion('Descargar Boleta de Honorarios BoletaBundle');
+            $manager->persist($bh_load_resumen);
+        }
+        $this->addReference('ad_boleta_per-bh-load-resumen-sii',$bh_load_resumen);
 
         $manager->flush();
     }
@@ -42,6 +50,6 @@ class LoadPermisoData extends AbstractFixture implements OrderedFixtureInterface
      */
     public function getOrder()
     {
-        return 2;
+        return 9;
     }
 }

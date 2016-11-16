@@ -1,0 +1,38 @@
+{{ render(controller('ADPerfilBundle:Navegacion:breadcrumbs')) }}
+{{ render(controller('ADPerfilBundle:Navegacion:menu')) }}
+{{ render(controller('ADPerfilBundle:Navegacion:pageTitle')) }}
+{{ form_start(form) }}
+<div class="panel panel-default">
+    <div class="panel-body">
+        {{ form_widget(form) }}
+    </div>
+    <div class="panel-footer text-right">
+        <button class="btn btn-primary" type="submit">Cargar</button>&nbsp;
+        <a class="btn btn-danger" href="{{ path('ad_perfil_menu', {'menu_slug' : menu_superior }) }}">Cancelar</a>
+    </div>
+</div>
+{{ form_end(form) }}
+
+{% if data | length > 0 %}
+<div class="panel panel-success">
+    <div class="panel-heading">Resultado Carga del Resumen</div>
+    <div class="panel-body">
+        <table>
+            <thead><tr><td>N°</td><td>Fila</td><td>Rut</td><td>N° Boleta</td><td>Estado</td></tr></thead>
+            <tbody>
+            {% for bh in data %}
+            <tr {% if bh.class is defined %}class="{{ bh.class }}"{% endif %}>
+                <td>{{ loop.index }}</td>
+                <td>{{ bh.fila }}</td>
+                <td>{{ bh.rut }}</td>
+                <td>{{ bh.numero }}</td>
+                <td>{{ bh.estado }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <div class="panel-footer text-right">
+        <a class="btn btn-danger" href="{{ path('ad_perfil_menu', {'menu_slug' : menu_superior }) }}">Cancelar</a>
+    </div>
+</div>

@@ -2,12 +2,12 @@
 <html>
     <head>
         <meta charset="UTF-8" />
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
+        <title>{% block ad_boleta_title %}ADBoletaBundle{% endblock %} - {% block ad_boleta_subtitle %}Inicio{% endblock %}</title>
+        {% block ad_boleta_stylesheets %}{% endblock %}
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
     </head>
     <body>
-        {% block body %}{% endblock %}
-        {% block javascripts %}{% endblock %}
+        {% block ad_boleta_body %}{% endblock %}
+        {% block ad_boleta_javascripts %}{% endblock %}
     </body>
 </html>

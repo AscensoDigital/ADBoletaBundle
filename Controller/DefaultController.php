@@ -2,11 +2,14 @@
 
 namespace AscensoDigital\BoletaBundle\Controller;
 
+use AppBundle\Util\CargaResumenBoletasSii;
 use AscensoDigital\BoletaBundle\Doctrine\BoletaHonorarioManager;
+use AscensoDigital\BoletaBundle\Form\CargaResumenBoletasSiiFormType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -37,5 +40,25 @@ class DefaultController extends Controller
         $response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT,$nombre);
 
         return $response;
+    }
+
+    /**
+     * @param Request $request
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
+     * @Route("/bhe/load-resumen-sii", name="ad_boleta_load_resumen_boletas_sii")
+     * @Security("is_granted('permiso','ad_boleta-load-resumen-bhe-sii')")
+     */
+    public function loadResumenBoletasSiiAction(Request $request) {
+        $crbh = new CargaResumenBoletasSii();
+        $form = $this->createForm(CargaResumenBoletasSiiFormType::class, $crbh);
+        $form->handleRequest($request);
+        $data=array();
+        if($form->isSubmitted() && $form->isValid()){
+            $em=$this->getDoctrine()->getManager();
+            $data=$crbh->procesa($em);
+            $em->flush();
+        }
+        return $this->render('ADBoletaBundle:default:load-resumen-boletas-sii.html.twig',
+            [ 'form' => $form->createView(), 'menu_superior' => $this->getParameter('ad_boleta.config')['menu_superior_slug'], 'data' => $data ]);
     }
 }
