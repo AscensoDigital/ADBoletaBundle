@@ -6,13 +6,12 @@
  * Time: 11:19
  */
 
-namespace AppBundle\Util;
+namespace AscensoDigital\BoletaBundle\Util;
 
 
 use AscensoDigital\BoletaBundle\Doctrine\BoletaHonorarioManager;
 use AscensoDigital\BoletaBundle\Entity\BoletaHonorario;
 use AscensoDigital\BoletaBundle\Entity\Empresa;
-use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class CargaResumenBoletasSii
