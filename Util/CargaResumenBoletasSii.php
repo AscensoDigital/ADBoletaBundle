@@ -77,7 +77,7 @@ class CargaResumenBoletasSii
     {
         $sheet = $this->cargarExcel()[0];
         $hRow = $sheet->getHighestRow();
-        $boletaEstados = $bhm->getRepository('ADBoletaBundle:BoletaEstado')->findAllByNombre();
+        $boletaEstados = $bhm->getObjectManager()->getRepository('ADBoletaBundle:BoletaEstado')->findAllByNombre();
         $boletaEstadosTransforma=array('VIG' => 'Vigente', 'ANUL' => 'Anulada', 'VCA' => 'V.C.A.');
         $ret=array();
         $dat_id=0;
@@ -87,7 +87,7 @@ class CargaResumenBoletasSii
             // Obtener datos basicos desde excel
             $numero = "" != self::BH_NUMERO ? (int)$sheet->getCell(self::BH_NUMERO . $row)->getValue() : null;
             $estado = "" != self::BH_ESTADO ? $sheet->getCell(self::BH_ESTADO . $row)->getValue() : null;
-            $fecha = "" != self::BH_FECHA ? $sheet->getCell(self::BH_FECHA . $row)->getValue() : null;
+            $fecha = "" != self::BH_FECHA ? $sheet->getCell(self::BH_FECHA . $row)->getFormattedValue() : null;
             $rut = "" != self::EM_RUT ? $sheet->getCell(self::EM_RUT . $row)->getValue() : null;
             $m_bruto = "" != self::MONTO_BRUTO ? $sheet->getCell(self::MONTO_BRUTO . $row)->getValue() : null;
             $m_retenido = "" != self::MONTO_RETENIDO ? $sheet->getCell(self::MONTO_RETENIDO . $row)->getValue() : null;
