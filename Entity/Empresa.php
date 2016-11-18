@@ -134,8 +134,13 @@ class Empresa
      */
     protected $representanteEstadoCivil;
 
-    
-    
+
+    public function __toString()
+    {
+        return $this->getNombre();
+    }
+
+
     /**
      * @return int
      */
