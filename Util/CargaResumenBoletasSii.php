@@ -83,17 +83,18 @@ class CargaResumenBoletasSii
         $dat_id=0;
         // iterar sobre filas
         for ($row = 2; $row <= $hRow; $row++) {
-            //dump($row);
             // Obtener datos basicos desde excel
             $numero = "" != self::BH_NUMERO ? (int)$sheet->getCell(self::BH_NUMERO . $row)->getValue() : null;
-            $estado = "" != self::BH_ESTADO ? $sheet->getCell(self::BH_ESTADO . $row)->getValue() : null;
-            $fecha = "" != self::BH_FECHA ? $sheet->getCell(self::BH_FECHA . $row)->getFormattedValue() : null;
-            $rut = "" != self::EM_RUT ? $sheet->getCell(self::EM_RUT . $row)->getValue() : null;
-            $m_bruto = "" != self::MONTO_BRUTO ? $sheet->getCell(self::MONTO_BRUTO . $row)->getValue() : null;
-            $m_retenido = "" != self::MONTO_RETENIDO ? $sheet->getCell(self::MONTO_RETENIDO . $row)->getValue() : null;
-            $m_pagado = "" != self::MONTO_PAGADO ? $sheet->getCell(self::MONTO_PAGADO . $row)->getValue() : null;
-
             if ($numero > 0) {
+                $estado = "" != self::BH_ESTADO ? $sheet->getCell(self::BH_ESTADO . $row)->getValue() : null;
+                $fecha = "" != self::BH_FECHA ? $sheet->getCell(self::BH_FECHA . $row)->getFormattedValue() : null;
+                $fechaArr=explode('-',$fecha);dump($fecha);dump($fechaArr);
+                $datetime=new \DateTime('20'.$fechaArr[2].'-'.$fechaArr[1].'-'.$fechaArr[0]);
+                $rut = "" != self::EM_RUT ? $sheet->getCell(self::EM_RUT . $row)->getValue() : null;
+                $m_bruto = "" != self::MONTO_BRUTO ? $sheet->getCell(self::MONTO_BRUTO . $row)->getValue() : null;
+                $m_retenido = "" != self::MONTO_RETENIDO ? $sheet->getCell(self::MONTO_RETENIDO . $row)->getValue() : null;
+                $m_pagado = "" != self::MONTO_PAGADO ? $sheet->getCell(self::MONTO_PAGADO . $row)->getValue() : null;
+
                 $ret[$dat_id]['rut'] = $rut;
 
                 $bh = $bhm->findBoletaHonorarioBy(['numero' => $numero, 'rutEmisor' => $rut]);
@@ -106,7 +107,7 @@ class CargaResumenBoletasSii
                         ->setCargador($usuario)
                         ->setEmpresa($this->getEmpresa())
                         ->setRutEmisor($rut)
-                        ->setFechaBoleta($fecha)
+                        ->setFechaBoleta($datetime)
                         ->setMonto($m_bruto)
                         ->setMontoImpuesto($m_retenido)
                         ->setMontoLiquido($m_pagado)
