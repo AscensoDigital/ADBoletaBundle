@@ -17,8 +17,8 @@
 <div class="panel panel-success">
     <div class="panel-heading">Resultado Carga del Resumen</div>
     <div class="panel-body">
-        <table>
-            <thead><tr><td>N°</td><td>Fila</td><td>Rut</td><td>N° Boleta</td><td>Estado</td></tr></thead>
+        <table class="table table-bordered col-md-6">
+            <thead><tr class="bg-primary"><td>N°</td><td>Fila</td><td>Rut</td><td>N° Boleta</td><td>Estado</td></tr></thead>
             <tbody>
             {% for bh in data %}
             <tr {% if bh.class is defined %}class="{{ bh.class }}"{% endif %}>
