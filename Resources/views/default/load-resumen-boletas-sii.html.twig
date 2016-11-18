@@ -1,7 +1,7 @@
 {% extends 'ADBoletaBundle::base.html.twig' %}
 
-{% block ad_boleta_title %}Boletas de Honorario{% endblock ad_perfil_title %}
-{% block ad_boleta_subtitle %}Cargar Resumen SII{% endblock ad_perfil_subtitle %}
+{% block ad_boleta_title %}Boletas de Honorario{% endblock ad_boleta_title %}
+{% block ad_boleta_subtitle %}Cargar Resumen SII{% endblock ad_boleta_subtitle %}
 {% block ad_boleta_content %}
     {{ include('ADBoletaBundle:default:load-resumen-boletas-sii_content.html.twig') }}
-{% endblock ad_perfil_content %}
+{% endblock ad_boleta_content %}
