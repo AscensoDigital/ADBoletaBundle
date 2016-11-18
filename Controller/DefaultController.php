@@ -54,9 +54,7 @@ class DefaultController extends Controller
         $form->handleRequest($request);
         $data=array();
         if($form->isSubmitted() && $form->isValid()){
-            $em=$this->getDoctrine()->getManager();
-            $data=$crbh->procesa($em);
-            $em->flush();
+            $data=$crbh->procesa($this->get('ad_boleta.boleta_honorario_manager'),  $this->getUser());
         }
         return $this->render('ADBoletaBundle:default:load-resumen-boletas-sii.html.twig',
             [ 'form' => $form->createView(), 'menu_superior' => $this->getParameter('ad_boleta.config')['menu_superior_slug'], 'data' => $data ]);

@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * BoletaEstado
  *
  * @ORM\Table(name="ad_boleta_boleta_estado")
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="AscensoDigital\BoletaBundle\Repository\BoletaEstadoRepository")
  */
 class BoletaEstado
 {
