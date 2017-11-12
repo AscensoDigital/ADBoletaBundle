@@ -9,12 +9,12 @@
 namespace AscensoDigital\BoletaBundle\DataFixtures\ORM;
 
 
+use AscensoDigital\PerfilBundle\DataFixtures\ORM\LoadColorData;
 use AscensoDigital\PerfilBundle\Entity\Menu;
-use Doctrine\Common\DataFixtures\AbstractFixture;
-use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
+use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
-class LoadMenuData extends AbstractFixture implements OrderedFixtureInterface
+class LoadMenuData extends Fixture
 {
 
     /**
@@ -39,13 +39,9 @@ class LoadMenuData extends AbstractFixture implements OrderedFixtureInterface
         $manager->flush();
     }
 
-    /**
-     * Get the order of this fixture
-     *
-     * @return integer
-     */
-    public function getOrder()
+    public function getDependencies()
     {
-        return 10;
+        return [LoadColorData::class,
+            LoadPermisoData::class];
     }
 }

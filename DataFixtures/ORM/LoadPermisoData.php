@@ -10,11 +10,10 @@ namespace AscensoDigital\BoletaBundle\DataFixtures\ORM;
 
 
 use AscensoDigital\PerfilBundle\Entity\Permiso;
-use Doctrine\Common\DataFixtures\AbstractFixture;
-use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
+use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
-class LoadPermisoData extends AbstractFixture implements OrderedFixtureInterface
+class LoadPermisoData extends Fixture
 {
 
     /**
@@ -41,15 +40,5 @@ class LoadPermisoData extends AbstractFixture implements OrderedFixtureInterface
         $this->addReference('ad_boleta_per-bh-load-resumen-sii',$bh_load_resumen);
 
         $manager->flush();
-    }
-
-    /**
-     * Get the order of this fixture
-     *
-     * @return integer
-     */
-    public function getOrder()
-    {
-        return 9;
     }
 }

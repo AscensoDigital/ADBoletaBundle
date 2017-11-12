@@ -10,22 +10,11 @@ namespace AscensoDigital\BoletaBundle\DataFixtures\ORM;
 
 
 use AscensoDigital\BoletaBundle\Entity\BoletaEstado;
-use Doctrine\Common\DataFixtures\AbstractFixture;
-use Doctrine\Common\DataFixtures\OrderedFixtureInterface;
+use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
 
-class LoadBoletaEstadoData extends AbstractFixture implements OrderedFixtureInterface
+class LoadBoletaEstadoData extends Fixture
 {
-
-    /**
-     * Get the order of this fixture
-     *
-     * @return integer
-     */
-    public function getOrder()
-    {
-        return 1;
-    }
 
     /**
      * Load data fixtures with the passed EntityManager
