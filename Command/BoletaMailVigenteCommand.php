@@ -32,7 +32,8 @@ class BoletaMailVigenteCommand extends ContainerAwareCommand
             ->addArgument('user',InputArgument::REQUIRED,'Cuenta de email a leer')
             ->addArgument('password',InputArgument::REQUIRED,'Password cuenta de email a leer')
             ->addOption('mail_id','m',InputOption::VALUE_OPTIONAL,'id email en particular',null)
-            ->addOption('status','t',InputOption::VALUE_NONE,'mostrar barra de avance');
+            ->addOption('status','t',InputOption::VALUE_NONE,'mostrar barra de avance')
+            ->addOption('all','a',InputOption::VALUE_NONE,'releer todos los correos');
     }
 
     /**
@@ -53,8 +54,12 @@ class BoletaMailVigenteCommand extends ContainerAwareCommand
             return;
         }
         if(is_null($input->getOption('mail_id'))){
-            $vigentes = imap_search($conn, 'SUBJECT "Emision" UNSEEN', SE_UID);
-            //$vigentes = imap_search($conn, 'SUBJECT "Emision"', SE_UID);
+            if($input->getOption('all')){
+                $vigentes = imap_search($conn, 'SUBJECT "Emision"', SE_UID);
+            }
+            else {
+                $vigentes = imap_search($conn, 'SUBJECT "Emision" UNSEEN', SE_UID);
+            }
         }
         else {
             $vigentes=array($input->getOption('mail_id'));

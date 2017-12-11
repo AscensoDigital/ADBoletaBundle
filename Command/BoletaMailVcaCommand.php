@@ -29,7 +29,8 @@ class BoletaMailVcaCommand extends ContainerAwareCommand {
             ->addArgument('user',InputArgument::REQUIRED,'Cuenta de email a leer')
             ->addArgument('password',InputArgument::REQUIRED,'Password cuenta de email a leer')
             ->addOption('mail_id','m',InputOption::VALUE_OPTIONAL,'id email en particular',null)
-            ->addOption('status','t',InputOption::VALUE_NONE,'mostrar barra de avance');
+            ->addOption('status','t',InputOption::VALUE_NONE,'mostrar barra de avance')
+            ->addOption('all','a',InputOption::VALUE_NONE,'releer todos los correos');
     }
     
     protected function execute(InputInterface $input, OutputInterface $output) {
@@ -40,8 +41,12 @@ class BoletaMailVcaCommand extends ContainerAwareCommand {
         $conn=imap_open($mailbox , $user , $password) or die('Cannot connect to Gmail: ' . imap_last_error());
 
         if(is_null($input->getOption('mail_id'))){
-            $anulados = imap_search($conn, 'SUBJECT "Solicitud de Anulacion" UNSEEN', SE_UID);
-            //$anulados = imap_search($conn, 'SUBJECT "Solicitud de Anulacion"', SE_UID);
+            if($input->getOption('all')){
+                $anulados = imap_search($conn, 'SUBJECT "Solicitud de Anulacion"', SE_UID);
+            }
+            else {
+                $anulados = imap_search($conn, 'SUBJECT "Solicitud de Anulacion" UNSEEN', SE_UID);
+            }
         }
         else {
             $anulados=array($input->getOption('mail_id'));
