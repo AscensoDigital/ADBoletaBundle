@@ -111,14 +111,14 @@ class BoletaService {
     
     public function getMontoBruto() {
         if(is_null($this->montoBruto)) {
-            $this->montoBruto=call_user_func(array($this->manejador, 'getRutDestinatarioCompleto'));
+            $this->montoBruto=call_user_func(array($this->manejador, 'getMontoBruto'));
         }
         return $this->montoBruto;
     }
     
     public function getMontoImpuesto() {
         if(is_null($this->montoImpuesto)) {
-            $this->montoImpuesto=call_user_func(array($this->manejador, 'getRutDestinatarioCompleto'));
+            $this->montoImpuesto=call_user_func(array($this->manejador, 'getMontoImpuesto'));
         }
         return $this->montoImpuesto;
     }
