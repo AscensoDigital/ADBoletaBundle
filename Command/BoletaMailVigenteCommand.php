@@ -32,6 +32,7 @@ class BoletaMailVigenteCommand extends ContainerAwareCommand
             ->addArgument('user',InputArgument::REQUIRED,'Cuenta de email a leer')
             ->addArgument('password',InputArgument::REQUIRED,'Password cuenta de email a leer')
             ->addOption('mail_id','m',InputOption::VALUE_OPTIONAL,'id email en particular',null)
+            ->addOption('boleta_formato','f',InputOption::VALUE_OPTIONAL,'formato del archivo de boleta a leer',BoletaService::XML)
             ->addOption('status','t',InputOption::VALUE_NONE,'mostrar barra de avance')
             ->addOption('all','a',InputOption::VALUE_NONE,'releer todos los correos');
     }
@@ -82,6 +83,8 @@ class BoletaMailVigenteCommand extends ContainerAwareCommand
         $bhe_vigente=$em->getRepository('ADBoletaBundle:BoletaEstado')->find(BoletaEstado::VIGENTE);
         $bhe_invalid=$em->getRepository('ADBoletaBundle:BoletaEstado')->find(BoletaEstado::PDF_INVALIDO);
         $bhe_anular=$em->getRepository('ADBoletaBundle:BoletaEstado')->find(BoletaEstado::ANULAR);
+
+        $boleta_formato=$input->getOption('boleta_formato');
 
         $tot=count($vigentes);
         if($input->getOption('status')) {
@@ -142,22 +145,26 @@ class BoletaMailVigenteCommand extends ContainerAwareCommand
                 }
                 foreach ($contenidos['attachment'] as $attachment) {
                     if ($attachment ['is_attachment']) {
-                        $nombre = explode(".", $attachment ['filename']);
+                        $nombreFichero = $attachment ['filename'];
+                        $nombre = explode(".", $nombreFichero);
                         $extension = $nombre[count($nombre) - 1];
-                        if ($extension == 'pdf') {
+
+                        if (in_array($extension,['pdf', $boleta_formato])) {
                             //dump($attachment ['attachment']);
-                            $nombreFichero = $attachment ['filename'];
                             $adjunto = $attachment ['attachment'];
                             if ($adjunto) {
                                 $path_boleta=$this->getContainer()->getParameter('ad_boleta_ruta_boletas'). DIRECTORY_SEPARATOR . $empresa->getSlug() . DIRECTORY_SEPARATOR .$nombreFichero;
-                                $bhe->setRutaArchivo($empresa->getSlug() . DIRECTORY_SEPARATOR . $nombreFichero);
-                                
+
+                                if($extension==BoletaService::PDF) {
+                                    $bhe->setRutaArchivo($empresa->getSlug() . DIRECTORY_SEPARATOR . $nombreFichero);
+                                }
                                 //se guarda boleta en el servidor
                                 $gestor = fopen($path_boleta, 'w');
                                 fwrite($gestor, $adjunto);
                                 fclose($gestor);
+
                                 try {
-                                    $boleta_srv->loadPdf($path_boleta);
+                                    $boleta_srv->load($path_boleta,$boleta_formato);
                                     /*$output->writeln('Lectura pdf');
                                     $output->writeln('Glosa: '.$boleta_srv->getGlosa());
                                     $output->writeln('Bruto: '.$boleta_srv->getMontoBruto());
@@ -188,7 +195,7 @@ class BoletaMailVigenteCommand extends ContainerAwareCommand
                                     if(is_null($bhe->getMonto())){
                                         $bhe->setBoletaEstado($bhe_invalid);
                                     }
-                                    $output->writeln('Error de pdf mail: '.$email.' RUT:'.$rut_boleta.' boleta: '.$boleta_numero);
+                                    $output->writeln('Error de Boleta Service: '.$email.' RUT:'.$rut_boleta.' boleta: '.$boleta_numero);
                                 }
                             }
                         }

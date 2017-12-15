@@ -11,6 +11,10 @@ use Doctrine\ORM\EntityManager;
  * @author claudio
  */
 class BoletaService {
+
+    const PDF = "pdf";
+    const XML = "xml";
+
     /**
      * @var EntityManager
      */
@@ -21,8 +25,7 @@ class BoletaService {
      * @var XpdfService 
      */
     private $xpdf;
-    protected $contenido;
-    protected $arrCont;
+    private $manejador;
     
     protected $boletaNumero;
     protected $rutEmisor;
@@ -42,10 +45,8 @@ class BoletaService {
         $this->xpdf=$xpdf;
         $this->em=$em;
     }
-    
-    public function loadPdf($pathPdf) {
-        $this->contenido=$this->xpdf->getText($pathPdf);
-        $this->arrCont=  explode("\n", $this->contenido);
+
+    public function load($path, $modalidad) {
         $this->boletaNumero=null;
         $this->fechaEmision=null;
         $this->fechaBoleta=null;
@@ -56,93 +57,74 @@ class BoletaService {
         $this->rutDestinatario=null;
         $this->rutEmisor=null;
         $this->nombreEmisor=null;
-    }
-    
-    public function getContenido() {
-        return $this->contenido;
-    }
-    
-    public function getArrayContenido() {
-        return $this->arrCont;
-    }
-    
-    public function find($context) {
-        foreach ($this->getArrayContenido() as $key => $fila) {
-            if(strrpos($fila, $context)!==false) {
-                return $key;
-            }
+
+        $this->manejador= $modalidad==self::XML ? 'BoletaXml' : 'BoletaPdf';
+        call_user_func(array($this->manejador, 'load'), $path);
+        if($modalidad==self::PDF){
+            call_user_func(array($this->manejador, 'setXpdf'), $this->xpdf);
         }
-        return null;
     }
+
 
     public function getBoletaNumero() {
         if(is_null($this->boletaNumero)) {
-            $i=is_null($this->find('N °')) ? $this->find('N°') : $this->find('N °');
-            $this->boletaNumero=intval(substr($this->arrCont[$i], strrpos($this->arrCont[$i]," ")+1));
+            $this->boletaNumero=call_user_func(array($this->manejador, 'getBoletaNumero'));
         }
         return $this->boletaNumero;
     }
     
     public function getRutEmisor() {
-        return intval(str_replace('.', '', substr($this->getRutEmisorCompleto(), 0, strlen($this->getRutEmisorCompleto())-2)));
+        $rutEmisor=$this->getRutEmisorCompleto();
+        return intval(str_replace('.', '', substr($rutEmisor, 0, strlen($rutEmisor)-2)));
     }
     
     public function getRutEmisorCompleto() {
         if(is_null($this->rutEmisor)) {
-            $i=$this->find('RUT:');
-            $this->rutEmisor=str_replace(' ', '',substr($this->arrCont[$i], strrpos($this->arrCont[$i],": ")+2));
+            $this->rutEmisor=call_user_func(array($this->manejador, 'getRutEmisorCompleto'));
         }
         return $this->rutEmisor;
     }
     
     public function getRutDestinatario() {
-        return intval(str_replace('.', '', substr($this->getRutDestinatarioCompleto(), 0, strlen($this->getRutDestinatarioCompleto())-2)));
+        $rutDestinatario=$this->getRutDestinatarioCompleto();
+        return intval(str_replace('.', '', substr($rutDestinatario, 0, strlen($rutDestinatario)-2)));
     }
     
     public function getRutDestinatarioCompleto() {
         if(is_null($this->rutDestinatario)) {
-            $i=$this->find('Señor(es):');
-            $this->rutDestinatario=str_replace(' ', '',substr($this->arrCont[$i], strrpos($this->arrCont[$i],": ")+2));
+            $this->rutDestinatario=call_user_func(array($this->manejador, 'getRutDestinatarioCompleto'));
         }
         return $this->rutDestinatario;
     }
     
     public function getGlosa() {
-        return implode(", ", $this->getGloseCompleta());
+        return implode(", ", $this->getGlosaCompleta());
     }
     
-    public function getGloseCompleta() {
+    public function getGlosaCompleta() {
         if(is_null($this->glosa)) {
-            $this->glosa=array();
-            $i=$this->find('Por atención profesional:')+1;
-            do {
-                $this->glosa[]=substr($this->arrCont[$i], 0,strrpos($this->arrCont[$i],' '));
-                $i++;
-            } while (isset($this->arrCont[$i]) and strrpos($this->arrCont[$i], 'Total Honorarios $: ')===false);
+            $this->glosa=call_user_func(array($this->manejador, 'getGlosaCompleta'));
         }
         return $this->glosa;
     }
     
     public function getMontoBruto() {
         if(is_null($this->montoBruto)) {
-            $i=$this->find('Total Honorarios $:');
-            $this->montoBruto=intval(str_replace('.', '',substr($this->arrCont[$i], strrpos($this->arrCont[$i],'Total Honorarios $: ')+strlen('Total Honorarios $: '))));
+            $this->montoBruto=call_user_func(array($this->manejador, 'getRutDestinatarioCompleto'));
         }
         return $this->montoBruto;
     }
     
     public function getMontoImpuesto() {
         if(is_null($this->montoImpuesto)) {
-            $i=$this->find('Retenido:');
-            $this->montoImpuesto= ($i===false or is_null($i)) ? 0 : intval(str_replace('.', '',substr($this->arrCont[$i], strrpos($this->arrCont[$i],'Retenido: ')+strlen('Retenido: '))));
+            $this->montoImpuesto=call_user_func(array($this->manejador, 'getRutDestinatarioCompleto'));
         }
         return $this->montoImpuesto;
     }
     
     public function getMontoLiquido() {
         if(is_null($this->montoLiquido)) {
-            $i=$this->find('Total:');
-            $this->montoLiquido= ($i===false or is_null($i)) ? 0 : intval(str_replace('.', '',substr($this->arrCont[$i], strrpos($this->arrCont[$i],'Total: ')+strlen('Total: '))));
+            $this->montoLiquido= call_user_func(array($this->manejador, 'getMontoLiquido'));
             $this->montoLiquido= ($this->montoLiquido==0) ? $this->getMontoBruto() : $this->montoLiquido;
         }
         return $this->montoLiquido;
@@ -150,21 +132,20 @@ class BoletaService {
 
     public function getFechaBoleta() {
         if(is_null($this->fechaBoleta)) {
-            $i=$this->find('Fecha:');
-            $this->fechaBoleta=substr($this->arrCont[$i], strrpos($this->arrCont[$i],'Fecha: ')+strlen('Fecha: '));
+            $this->fechaBoleta=call_user_func(array($this->manejador, 'getFechaBoleta'));
         }
         return $this->fechaBoleta;
     }
 
     public function getFechaBoletaEstandar() {
-        $tmpD=explode(' ', $this->getFechaBoleta());
-        return $tmpD[4].'-'.$this->MMM2mm[$tmpD[2]].'-'.$tmpD[0].' 00:00:00';
+        $fecha=$this->getFechaBoleta();
+        $tmpD=explode(' ', $fecha);
+        return (count($tmpD) ? $tmpD[4].'-'.$this->MMM2mm[$tmpD[2]].'-'.$tmpD[0] : $fecha).' 00:00:00';
     }
 
     public function getFechaEmision() {
         if(is_null($this->fechaEmision)) {
-            $i=$this->find('Fecha / Hora Emisi');
-            $this->fechaEmision=trim(substr($this->arrCont[$i], strrpos($this->arrCont[$i],'Fecha / Hora Emisi')+strlen('Fecha / Hora Emisi')+4));
+            $this->fechaEmision=call_user_func(array($this->manejador, 'getFechaEmision'));
         }
         return $this->fechaEmision;
     }
