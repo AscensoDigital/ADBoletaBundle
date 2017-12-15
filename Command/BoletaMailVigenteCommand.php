@@ -164,7 +164,7 @@ class BoletaMailVigenteCommand extends ContainerAwareCommand
                                 fclose($gestor);
 
                                 try {
-                                    $boleta_srv->load($path_boleta,$boleta_formato);
+                                    $boleta_srv->load($path_boleta,$extension);
                                     /*$output->writeln('Lectura pdf');
                                     $output->writeln('Glosa: '.$boleta_srv->getGlosa());
                                     $output->writeln('Bruto: '.$boleta_srv->getMontoBruto());

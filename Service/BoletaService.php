@@ -58,7 +58,7 @@ class BoletaService {
         $this->rutEmisor=null;
         $this->nombreEmisor=null;
 
-        $this->manejador= $modalidad==self::XML ? 'BoletaXml' : 'BoletaPdf';
+        $this->manejador = ($modalidad==self::XML ? 'AscensoDigital\BoletaBundle\Util\BoletaXml' : 'AscensoDigital\BoletaBundle\Util\BoletaPdf');
         call_user_func(array($this->manejador, 'load'), $path);
         if($modalidad==self::PDF){
             call_user_func(array($this->manejador, 'setXpdf'), $this->xpdf);
