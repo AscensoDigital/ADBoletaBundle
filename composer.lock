@@ -575,37 +575,41 @@
         },
         {
             "name": "doctrine/doctrine-bundle",
-            "version": "1.6.13",
+            "version": "1.8.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/DoctrineBundle.git",
-                "reference": "8cd4c2921b6cef14a78d98cd3f0fb81ba6a976f9"
+                "reference": "eb6e4fb904a459be28872765ab6e2d246aac7c87"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/DoctrineBundle/zipball/8cd4c2921b6cef14a78d98cd3f0fb81ba6a976f9",
-                "reference": "8cd4c2921b6cef14a78d98cd3f0fb81ba6a976f9",
+                "url": "https://api.github.com/repos/doctrine/DoctrineBundle/zipball/eb6e4fb904a459be28872765ab6e2d246aac7c87",
+                "reference": "eb6e4fb904a459be28872765ab6e2d246aac7c87",
                 "shasum": ""
             },
             "require": {
-                "doctrine/dbal": "~2.3",
+                "doctrine/dbal": "^2.5.12",
                 "doctrine/doctrine-cache-bundle": "~1.2",
-                "jdorn/sql-formatter": "~1.1",
-                "php": ">=5.5.9",
+                "jdorn/sql-formatter": "^1.2.16",
+                "php": "^5.5.9|^7.0",
                 "symfony/console": "~2.7|~3.0|~4.0",
                 "symfony/dependency-injection": "~2.7|~3.0|~4.0",
                 "symfony/doctrine-bridge": "~2.7|~3.0|~4.0",
                 "symfony/framework-bundle": "~2.7|~3.0|~4.0"
             },
+            "conflict": {
+                "symfony/http-foundation": "<2.6"
+            },
             "require-dev": {
                 "doctrine/orm": "~2.3",
-                "phpunit/phpunit": "~4",
+                "phpunit/phpunit": "^4.8.36|^5.7|^6.4",
                 "satooshi/php-coveralls": "^1.0",
                 "symfony/phpunit-bridge": "~2.7|~3.0|~4.0",
                 "symfony/property-info": "~2.8|~3.0|~4.0",
                 "symfony/validator": "~2.7|~3.0|~4.0",
+                "symfony/web-profiler-bundle": "~2.7|~3.0|~4.0",
                 "symfony/yaml": "~2.7|~3.0|~4.0",
-                "twig/twig": "~1.12|~2.0"
+                "twig/twig": "~1.26|~2.0"
             },
             "suggest": {
                 "doctrine/orm": "The Doctrine ORM integration is optional in the bundle.",
@@ -614,7 +618,7 @@
             "type": "symfony-bundle",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.6.x-dev"
+                    "dev-master": "1.8.x-dev"
                 }
             },
             "autoload": {
@@ -652,7 +656,7 @@
                 "orm",
                 "persistence"
             ],
-            "time": "2017-10-11T19:48:03+00:00"
+            "time": "2017-11-24T13:09:19+00:00"
         },
         {
             "name": "doctrine/doctrine-cache-bundle",
@@ -919,16 +923,16 @@
         },
         {
             "name": "doctrine/orm",
-            "version": "v2.5.12",
+            "version": "v2.5.13",
             "source": {
                 "type": "git",
                 "url": "https://github.com/doctrine/doctrine2.git",
-                "reference": "984535cadc609e9eef8c89414aa3568ee97aa79f"
+                "reference": "93103f44a3e36e7b48165b6e6b736833f33b18ef"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/doctrine/doctrine2/zipball/984535cadc609e9eef8c89414aa3568ee97aa79f",
-                "reference": "984535cadc609e9eef8c89414aa3568ee97aa79f",
+                "url": "https://api.github.com/repos/doctrine/doctrine2/zipball/93103f44a3e36e7b48165b6e6b736833f33b18ef",
+                "reference": "93103f44a3e36e7b48165b6e6b736833f33b18ef",
                 "shasum": ""
             },
             "require": {
@@ -991,7 +995,7 @@
                 "database",
                 "orm"
             ],
-            "time": "2017-10-23T18:21:04+00:00"
+            "time": "2017-11-27T23:25:55+00:00"
         },
         {
             "name": "evenement/evenement",
@@ -1047,22 +1051,22 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/FriendsOfSymfony/FOSUserBundle.git",
-                "reference": "715e6f149fa5c835900c7eeb3beea2867578f77e"
+                "reference": "a92d681585682fb11bf44b7bcb882b7538e26934"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/715e6f149fa5c835900c7eeb3beea2867578f77e",
-                "reference": "715e6f149fa5c835900c7eeb3beea2867578f77e",
+                "url": "https://api.github.com/repos/FriendsOfSymfony/FOSUserBundle/zipball/a92d681585682fb11bf44b7bcb882b7538e26934",
+                "reference": "a92d681585682fb11bf44b7bcb882b7538e26934",
                 "shasum": ""
             },
             "require": {
                 "paragonie/random_compat": "^1 || ^2",
                 "php": "^5.5.9 || ^7.0",
-                "symfony/form": "^2.7 || ^3.0",
-                "symfony/framework-bundle": "^2.7 || ^3.0",
-                "symfony/security-bundle": "^2.7 || ^3.0",
-                "symfony/templating": "^2.7 || ^3.0",
-                "symfony/twig-bundle": "^2.7 || ^3.0",
+                "symfony/form": "^2.8 || ^3.0",
+                "symfony/framework-bundle": "^2.8 || ^3.0",
+                "symfony/security-bundle": "^2.8 || ^3.0",
+                "symfony/templating": "^2.8 || ^3.0",
+                "symfony/twig-bundle": "^2.8 || ^3.0",
                 "twig/twig": "^1.28 || ^2.0"
             },
             "conflict": {
@@ -1072,17 +1076,17 @@
             "require-dev": {
                 "doctrine/doctrine-bundle": "^1.3",
                 "friendsofphp/php-cs-fixer": "^1.11",
-                "phpunit/phpunit": "~4.8|~5.0",
+                "phpunit/phpunit": "^4.8.35|^5.4.3",
                 "swiftmailer/swiftmailer": "^4.3 || ^5.0 || ^6.0",
-                "symfony/console": "^2.7 || ^3.0",
-                "symfony/phpunit-bridge": "^2.7 || ^3.0",
-                "symfony/validator": "^2.7 || ^3.0",
-                "symfony/yaml": "^2.7 || ^3.0"
+                "symfony/console": "^2.8 || ^3.0",
+                "symfony/phpunit-bridge": "^2.8 || ^3.0",
+                "symfony/validator": "^2.8 || ^3.0",
+                "symfony/yaml": "^2.8 || ^3.0"
             },
             "type": "symfony-bundle",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "2.0.x-dev"
+                    "dev-master": "2.1.x-dev"
                 }
             },
             "autoload": {
@@ -1107,8 +1111,7 @@
                     "homepage": "https://github.com/friendsofsymfony/FOSUserBundle/contributors"
                 },
                 {
-                    "name": "Thibault Duplessis",
-                    "email": "thibault.duplessis@gmail.com"
+                    "name": "Thibault Duplessis"
                 }
             ],
             "description": "Symfony FOSUserBundle",
@@ -1116,7 +1119,7 @@
             "keywords": [
                 "User management"
             ],
-            "time": "2017-10-24 09:06:59"
+            "time": "2017-12-14 11:14:55"
         },
         {
             "name": "incenteev/composer-parameter-handler",
@@ -1171,16 +1174,16 @@
         },
         {
             "name": "javiereguiluz/easyadmin-bundle",
-            "version": "v1.17.6",
+            "version": "v1.17.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/javiereguiluz/EasyAdminBundle.git",
-                "reference": "4552ca050bdcc3d9de4b43da4200fcf0f0f1b2db"
+                "reference": "50338b291d596c047f4eb53c22b4054509f0f5a1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/javiereguiluz/EasyAdminBundle/zipball/4552ca050bdcc3d9de4b43da4200fcf0f0f1b2db",
-                "reference": "4552ca050bdcc3d9de4b43da4200fcf0f0f1b2db",
+                "url": "https://api.github.com/repos/javiereguiluz/EasyAdminBundle/zipball/50338b291d596c047f4eb53c22b4054509f0f5a1",
+                "reference": "50338b291d596c047f4eb53c22b4054509f0f5a1",
                 "shasum": ""
             },
             "require": {
@@ -1191,37 +1194,36 @@
                 "pagerfanta/pagerfanta": "~1.0,>=1.0.1",
                 "php": ">=5.3.0",
                 "sensio/framework-extra-bundle": "~2.3|~3.0,>=3.0.2|4.0.x|~5.0",
-                "symfony/asset": "~2.3|~3.0|~4.0",
-                "symfony/config": "~2.3|~3.0|~4.0",
-                "symfony/dependency-injection": "~2.3|~3.0|~4.0",
-                "symfony/doctrine-bridge": "~2.3|~3.0|~4.0",
-                "symfony/event-dispatcher": "~2.3|~3.0|~4.0",
-                "symfony/form": "~2.3|~3.0|~4.0",
-                "symfony/framework-bundle": "~2.3|~3.0|~4.0",
-                "symfony/http-foundation": "~2.3|~3.0|~4.0",
-                "symfony/http-kernel": "~2.3|~3.0|~4.0",
+                "symfony/asset": "~2.3|~3.0|^4.0",
+                "symfony/config": "~2.3|~3.0|^4.0",
+                "symfony/dependency-injection": "~2.3|~3.0|^4.0",
+                "symfony/doctrine-bridge": "~2.3|~3.0|^4.0",
+                "symfony/event-dispatcher": "~2.3|~3.0|^4.0",
+                "symfony/form": "~2.3|~3.0|^4.0",
+                "symfony/framework-bundle": "~2.3|~3.0|^4.0",
+                "symfony/http-foundation": "~2.3|~3.0|^4.0",
+                "symfony/http-kernel": "~2.3|~3.0|^4.0",
                 "symfony/polyfill-mbstring": "^1.0",
-                "symfony/property-access": "~2.3|~3.0|~4.0",
-                "symfony/security-bundle": "~2.3|~3.0|~4.0",
-                "symfony/translation": "~2.3|~3.0|~4.0",
-                "symfony/twig-bridge": "^2.3.4|~3.0|~4.0",
-                "symfony/twig-bundle": "~2.3|~3.0|~4.0",
-                "symfony/validator": "~2.3|~3.0|~4.0",
+                "symfony/property-access": "~2.3|~3.0|^4.0",
+                "symfony/security-bundle": "~2.3|~3.0|^4.0",
+                "symfony/translation": "~2.3|~3.0|^4.0",
+                "symfony/twig-bridge": "^2.3.4|~3.0|^4.0",
+                "symfony/twig-bundle": "~2.3|~3.0|^4.0",
+                "symfony/validator": "~2.3|~3.0|^4.0",
                 "twig/extensions": "~1.0",
                 "twig/twig": "~1.26|~2.0"
             },
             "require-dev": {
                 "doctrine/doctrine-fixtures-bundle": "~2.2",
-                "phpunit/phpunit": "~4.4",
                 "psr/log": "~1.0",
-                "symfony/browser-kit": "~2.3|~3.0",
-                "symfony/console": "~2.3|~3.0",
-                "symfony/css-selector": "~2.3|~3.0",
-                "symfony/dom-crawler": "~2.3|~3.0",
-                "symfony/finder": "~2.3|~3.0",
-                "symfony/phpunit-bridge": "^2.7",
-                "symfony/var-dumper": "~2.3|~3.0",
-                "symfony/yaml": "~2.3|~3.0"
+                "symfony/browser-kit": "~2.3|~3.0|^4.0",
+                "symfony/console": "~2.3|~3.0|^4.0",
+                "symfony/css-selector": "~2.3|~3.0|^4.0",
+                "symfony/dom-crawler": "~2.3|~3.0|^4.0",
+                "symfony/finder": "~2.3|~3.0|^4.0",
+                "symfony/phpunit-bridge": "^3.2|^4.0",
+                "symfony/var-dumper": "~2.3|~3.0|^4.0",
+                "symfony/yaml": "~2.3|~3.0|^4.0"
             },
             "type": "symfony-bundle",
             "extra": {
@@ -1256,7 +1258,7 @@
                 "backend",
                 "generator"
             ],
-            "time": "2017-11-01T19:02:08+00:00"
+            "time": "2017-11-28T14:02:33+00:00"
         },
         {
             "name": "jdorn/sql-formatter",
@@ -1727,16 +1729,16 @@
         },
         {
             "name": "sensio/framework-extra-bundle",
-            "version": "v3.0.28",
+            "version": "v3.0.29",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sensiolabs/SensioFrameworkExtraBundle.git",
-                "reference": "65eadf9e3fd5c47eee7986b306a5aed8affe6496"
+                "reference": "bb907234df776b68922eb4b25bfa061683597b6a"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sensiolabs/SensioFrameworkExtraBundle/zipball/65eadf9e3fd5c47eee7986b306a5aed8affe6496",
-                "reference": "65eadf9e3fd5c47eee7986b306a5aed8affe6496",
+                "url": "https://api.github.com/repos/sensiolabs/SensioFrameworkExtraBundle/zipball/bb907234df776b68922eb4b25bfa061683597b6a",
+                "reference": "bb907234df776b68922eb4b25bfa061683597b6a",
                 "shasum": ""
             },
             "require": {
@@ -1793,7 +1795,7 @@
                 "annotations",
                 "controllers"
             ],
-            "time": "2017-10-12T17:37:20+00:00"
+            "time": "2017-12-14T19:03:23+00:00"
         },
         {
             "name": "symfony/polyfill-intl-icu",
@@ -2451,16 +2453,16 @@
         },
         {
             "name": "symfony/phpunit-bridge",
-            "version": "v3.3.11",
+            "version": "v3.4.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/phpunit-bridge.git",
-                "reference": "0cbc5e0f8af23dadf270371b9627f1f264cf6021"
+                "reference": "074c2e205c849a5fb37b1c24ade03cc975ac8079"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/phpunit-bridge/zipball/0cbc5e0f8af23dadf270371b9627f1f264cf6021",
-                "reference": "0cbc5e0f8af23dadf270371b9627f1f264cf6021",
+                "url": "https://api.github.com/repos/symfony/phpunit-bridge/zipball/074c2e205c849a5fb37b1c24ade03cc975ac8079",
+                "reference": "074c2e205c849a5fb37b1c24ade03cc975ac8079",
                 "shasum": ""
             },
             "require": {
@@ -2479,7 +2481,7 @@
             "type": "symfony-bridge",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "3.3-dev"
+                    "dev-master": "3.4-dev"
                 }
             },
             "autoload": {
@@ -2509,7 +2511,7 @@
             ],
             "description": "Symfony PHPUnit Bridge",
             "homepage": "https://symfony.com",
-            "time": "2017-11-07T14:16:22+00:00"
+            "time": "2017-12-14T19:40:10+00:00"
         }
     ],
     "aliases": [],
