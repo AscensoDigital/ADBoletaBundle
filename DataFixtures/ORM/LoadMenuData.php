@@ -54,6 +54,7 @@ class LoadMenuData extends Fixture
     public function getDependencies()
     {
         return [LoadColorData::class,
-            LoadPermisoData::class];
+            LoadPermisoData::class,
+            $this->container->getParameter('menu_superior_load_class')];
     }
 }

@@ -25,6 +25,7 @@ class Configuration implements ConfigurationInterface
                 ->scalarNode('ruta_boletas')->isRequired()->cannotBeEmpty()->end()
                 ->scalarNode('boleta_class')->isRequired()->cannotBeEmpty()->end()
                 ->scalarNode('menu_superior_slug')->isRequired()->cannotBeEmpty()->end()
+                ->scalarNode('menu_superior_load_class')->isRequired()->cannotBeEmpty()->end()
                 /*->arrayNode('database')
                     ->addDefaultsIfNotSet()
                     ->children()
