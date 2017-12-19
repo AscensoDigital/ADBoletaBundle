@@ -11,5 +11,6 @@ namespace AscensoDigital\BoletaBundle\Model;
 
 interface UserInterface
 {
+    public function __toString();
     public function getId();
 }

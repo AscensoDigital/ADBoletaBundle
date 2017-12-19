@@ -34,7 +34,7 @@ class BoletaHonorarioRepository extends EntityRepository {
             ->addSelect('u.username as rut')
             ->addSelect('u.celular as celular')
             ->from('ADBoletaBundle:BoletaHonorario', 'bh')
-            ->join('bh.usuario', 'u')
+            ->leftJoin('bh.usuario', 'u')
             ->join('bh.boletaEstado','bhe')
             ->orderBy('bh.id');
         $rs=$filtros->getQueryBuilder($qb)->getQuery()->getScalarResult();
