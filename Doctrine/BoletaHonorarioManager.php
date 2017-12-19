@@ -55,6 +55,10 @@ class BoletaHonorarioManager
         $this->objectManager->flush();
     }
 
+    public function find($id) {
+        return $this->repository->find($id);
+    }
+
     public function findBoletaHonorarioBy(array $criteria)
     {
         return $this->repository->findOneBy($criteria);

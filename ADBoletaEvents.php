@@ -18,4 +18,9 @@ final class ADBoletaEvents
      * The event listener method receives a AscensoDigital\BoletaBundle\Event\BoletaHonorarioEvent instance.
      */
     const MAIL_ANULADA_SUCCESS = 'ad_boleta.mail_anulada.success';
+
+    /**
+     * El evento VCA_ANULADA_SUCCESS ocurre cuando una boleta con estado vca es marcada como anulada correctamente.
+     */
+    const VCA_ANULADA_SUCCESS = 'ad_boleta.vca_anulada.success';
 }

@@ -2,7 +2,10 @@
 
 namespace AscensoDigital\BoletaBundle\Controller;
 
+use AscensoDigital\BoletaBundle\ADBoletaEvents;
 use AscensoDigital\BoletaBundle\Doctrine\BoletaHonorarioManager;
+use AscensoDigital\BoletaBundle\Entity\BoletaEstado;
+use AscensoDigital\BoletaBundle\Event\BoletaHonorarioEvent;
 use AscensoDigital\BoletaBundle\Form\CargaResumenBoletasSiiFormType;
 use AscensoDigital\BoletaBundle\Util\CargaResumenBoletasSii;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -43,6 +46,30 @@ class DefaultController extends Controller
     }
 
     /**
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @Route("/bhe/boletas", name="ad_boleta_boleta_list")
+     * @Security("is_granted('permiso','conta-boleta')")
+     */
+    public function boletasAction()
+    {
+        return $this->render('ADBoletaBundle:default:list.html.twig');
+    }
+
+    /**
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @Route("/bhe/list-table", name="ad_boleta_boleta_list_table")
+     * @Security("is_granted('permiso','conta-boleta')")
+     */
+    public function listTableAction() {
+        $em = $this->getDoctrine()->getManager();
+        $filtros = $this->get('ad_perfil.filtro_manager');
+        $boletas = $this->get('ad_boleta.boleta_honorario_manager')->findArrayByFiltros($filtros);
+        return $this->render('ADBoletaBundle:default:list-table.html.twig', array(
+            'boletas' => $boletas
+        ));
+    }
+
+    /**
      * @param Request $request
      * @return \Symfony\Component\HttpFoundation\RedirectResponse|\Symfony\Component\HttpFoundation\Response
      * @Route("/bhe/load-resumen-sii", name="ad_boleta_load_resumen_boletas_sii")
@@ -58,5 +85,75 @@ class DefaultController extends Controller
         }
         return $this->render('ADBoletaBundle:default:load-resumen-boletas-sii.html.twig',
             [ 'form' => $form->createView(), 'menu_superior' => $this->getParameter('ad_boleta.config')['menu_superior_slug'], 'data' => $data ]);
+    }
+
+    /**
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @Route("/bhe/vca/vigente/{boleta_id}", name="ad_boleta_vca_vigente")
+     * @Security("is_granted('permiso','ad_boleta-vca')")
+     */
+    public function boletaVcaVigenteAction($boleta_id) {
+        $boletaHonorario=$this->get('ad_boleta.boleta_honorario_manager')->find($boleta_id);
+        if($boletaHonorario){
+            if($boletaHonorario->getBoletaEstado()->getId()==BoletaEstado::VCA) {
+                $em = $this->getDoctrine()->getManager();
+                $vcav = $em->getRepository('AppBundle:BoletaEstado')->find(BoletaEstado::VCA_VIGENTE);
+                $boletaHonorario->setBoletaEstado($vcav);
+                $em->persist($boletaHonorario);
+                $em->flush();
+                $this->addFlash('success','Boleta Número '.$boletaHonorario->getNumero().' del RUT '.$boletaHonorario->getRutEmisor().' registrado como VCA Vigente');
+            }
+            else{
+                $this->addFlash('warning','La boleta de '.$boletaHonorario->getRutEmisor().' número '.$boletaHonorario->getNumero().' no tiene estado V.C.A.');
+            }
+        }
+        else {
+            $this->addFlash('danger','No existe la boleta con el id ingresado');
+        }
+        return $this->redirect($this->generateUrl('ad_boleta_boleta_list'));
+    }
+
+    /**
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     * @Route("/bhe/vca/anulada/{boleta_id}", name="ad_boleta_vca_anulada")
+     * @Security("is_granted('permiso','ad_boleta-vca')")
+     */
+    public function boletaVcaAnuladaAction($boleta_id){
+        $boletaHonorario=$this->get('ad_boleta.boleta_honorario_manager')->find($boleta_id);
+        if($boletaHonorario){
+            if($boletaHonorario->getBoletaEstado()->getId()==BoletaEstado::VCA) {
+                $em = $this->getDoctrine()->getManager();
+                $vcaa = $em->getRepository('AppBundle:BoletaEstado')->find(BoletaEstado::VCA_ANULADA);
+                $boletaHonorario->setBoletaEstado($vcaa);
+                $em->persist($boletaHonorario);
+
+                /** @var $dispatcher \Symfony\Component\EventDispatcher\EventDispatcherInterface */
+                $dispatcher = $this->get('event_dispatcher');
+                $event = new BoletaHonorarioEvent($boletaHonorario);
+                $dispatcher->dispatch(ADBoletaEvents::VCA_ANULADA_SUCCESS, $event);
+
+                if (0 < count($event->getModificados())) {
+                    foreach ($event->getModificados() as $obj) {
+                        $em->persist($obj);
+                    }
+                }
+
+                /** @var UsuarioPago $usuarioPago */
+                /*foreach ($boletaHonorario->getUsuarioPagos() as $usuarioPago) {
+                    $usuarioPago->setBoletaHonorario(null);
+                    $em->persist($usuarioPago);
+                }*/
+
+                $em->flush();
+                $this->addFlash('success','Boleta Número '.$boletaHonorario->getNumero().' del RUT '.$boletaHonorario->getRutEmisor().' registrado como VCA Anulada');
+            }
+            else{
+                $this->addFlash('warning','La boleta de '.$boletaHonorario->getRutEmisor().' número '.$boletaHonorario->getNumero().' no tiene estado V.C.A.');
+            }
+        }
+        else {
+            $this->addFlash('danger','No existe la boleta con el id ingresado');
+        }
+        return $this->redirect($this->generateUrl('ad_boleta_boleta_list'));
     }
 }

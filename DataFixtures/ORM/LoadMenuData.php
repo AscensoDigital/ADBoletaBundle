@@ -24,6 +24,18 @@ class LoadMenuData extends Fixture
      */
     public function load(ObjectManager $manager)
     {
+        $bh_list= new Menu();
+        $bh_list->setOrden(9)
+            ->setNombre('Listado Boletas')
+            ->setDescripcion('Listado con las boletas de honorarios cargadas en el sistema')
+            ->setColor($this->getReference('clr-azul'))
+            ->setIcono('fa fa-list-alt')
+            ->setRoute('ad_boleta_boleta_list')
+            ->setPermiso($this->getReference('ad_boleta_per-bh-list'))
+            ->setMenuSuperior($this->getReference('ad_boleta_mn-boleta-honorario'));
+        $manager->persist($bh_list);
+        $this->addReference('ad_boleta_mn-bh-list',$bh_list);
+
         $bh_load_resumen= new Menu();
         $bh_load_resumen->setOrden(10)
             ->setNombre('Cargar Resumen Boletas')

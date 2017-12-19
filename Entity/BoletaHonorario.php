@@ -9,6 +9,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 /**
  * BoletaHonorario
  *
+ * @ORM\Entity
+ *
  */
 abstract class BoletaHonorario
 {

@@ -44,5 +44,6 @@ class ADBoletaExtension extends Extension implements PrependExtensionInterface
     {
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('ad_boleta.easyadmin.yml');
+        $loader->load('ad_boleta.filtros.yml');
     }
 }

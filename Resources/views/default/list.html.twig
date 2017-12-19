@@ -1,0 +1,8 @@
+{% extends 'ADBoletaBundle::base.html.twig' %}
+
+{% block ad_boleta_title %}Boletas de Honorario{% endblock ad_boleta_title %}
+{% block ad_boleta_subtitle %}Listado{% endblock ad_boleta_subtitle %}
+{% block ad_boleta_content %}
+    {{ include('ADBoletaBundle:default:list_content.html.twig') }}
+    <script src="{{ asset('bundles/adperfil/js/ad_perfil.filtros.js') }}" type="application/javascript"></script>
+{% endblock ad_boleta_content %}

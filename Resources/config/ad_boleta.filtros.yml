@@ -1,0 +1,13 @@
+ad_perfil:
+    filtros:
+        boletaEstado:
+            table_alias: bhe
+            options:
+                class: AscensoDigital\BoletaBundle\Entity\BoletaEstado
+        fechaEmision:
+            type: Symfony\Component\Form\Extension\Core\Type\DateType
+            table_alias: bh
+            field: fechaEmision
+            options:
+                widget: single_text
+                attr: { class: 'fecha' }
