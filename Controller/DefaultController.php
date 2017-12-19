@@ -47,10 +47,10 @@ class DefaultController extends Controller
 
     /**
      * @return \Symfony\Component\HttpFoundation\Response
-     * @Route("/bhe/boletas", name="ad_boleta_boleta_list")
+     * @Route("/bhe/list", name="ad_boleta_boleta_list")
      * @Security("is_granted('permiso','conta-boleta')")
      */
-    public function boletasAction()
+    public function listAction()
     {
         return $this->render('ADBoletaBundle:default:list.html.twig');
     }
