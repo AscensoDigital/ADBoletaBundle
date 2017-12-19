@@ -17,7 +17,7 @@ use Doctrine\ORM\Query\Expr\Join;
 class BoletaHonorarioRepository extends EntityRepository {
 
     public function findArrayByFiltros(FiltroManager $filtros){
-        $qb=$this->getEntityManager()->createQueryBuilder()
+        $qb=$this->createQueryBuilder('bh')
             ->select('bh.id bh_id')
             ->addSelect('bh.glosa as bh_glosa')
             ->addSelect('bh.numero as numero')
@@ -33,7 +33,6 @@ class BoletaHonorarioRepository extends EntityRepository {
             ->addSelect('u.apellidoMaterno as apM')
             ->addSelect('u.username as rut')
             ->addSelect('u.celular as celular')
-            ->from('ADBoletaBundle:BoletaHonorario', 'bh')
             ->leftJoin('bh.usuario', 'u')
             ->join('bh.boletaEstado','bhe')
             ->orderBy('bh.id');
