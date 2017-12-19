@@ -1,6 +1,7 @@
 <?php
 namespace AscensoDigital\BoletaBundle\Doctrine;
 
+use AscensoDigital\PerfilBundle\Doctrine\FiltroManager;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\Common\Persistence\ObjectRepository;
 
@@ -57,6 +58,10 @@ class BoletaHonorarioManager
 
     public function find($id) {
         return $this->repository->find($id);
+    }
+
+    public function findArrayByFiltros(FiltroManager $filtros) {
+        return $this->repository->findArrayByFiltros($filtros);
     }
 
     public function findBoletaHonorarioBy(array $criteria)
