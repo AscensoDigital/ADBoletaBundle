@@ -26,6 +26,7 @@ class ADBoletaExtension extends Extension implements PrependExtensionInterface
         $container->setParameter('ad_boleta.config',$config);
         $container->setParameter('ad_boleta_ruta_boletas', $config['ruta_boletas']);
         $container->setParameter('ad_boleta.boleta_class',$config['boleta_class']);
+        $container->setParameter('ad_boleta.menu_superior_load_class',$config['menu_superior_load_class']);
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('services.yml');
     }

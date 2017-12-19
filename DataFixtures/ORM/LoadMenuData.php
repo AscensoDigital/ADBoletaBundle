@@ -55,6 +55,6 @@ class LoadMenuData extends Fixture
     {
         return [LoadColorData::class,
             LoadPermisoData::class,
-            $this->container->getParameter('menu_superior_load_class')];
+            $this->container->getParameter('ad_boleta.menu_superior_load_class')];
     }
 }
