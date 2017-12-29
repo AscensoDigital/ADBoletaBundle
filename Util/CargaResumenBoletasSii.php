@@ -78,7 +78,7 @@ class CargaResumenBoletasSii
         $sheet = $this->cargarExcel()[0];
         $hRow = $sheet->getHighestRow();
         $boletaEstados = $bhm->getObjectManager()->getRepository('ADBoletaBundle:BoletaEstado')->findAllByNombre();
-        $boletaEstadosTransforma=array('VIG' => 'Vigente', 'ANUL' => 'Anulada', 'VCA' => 'V.C.A.', 'NULA' => 'Anulada');
+        $boletaEstadosTransforma=array('VIG' => 'Vigente', 'ANUL' => 'Anulada', 'VCA' => 'V.C.A.', 'NULA' => 'Anulada', 'VIGENTE' => 'Vigente');
         $ret=array();
         $dat_id=0;
         // iterar sobre filas
