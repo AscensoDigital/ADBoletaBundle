@@ -16,9 +16,9 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class CargaResumenBoletasSii
 {
-    const BH_NUMERO = 'B';
+    const BH_NUMERO = 'A';
     const BH_ESTADO = 'C';
-    const BH_FECHA = 'D';
+    const BH_FECHA = 'B';
     const EM_RUT = 'E';
     const EM_NOMBRE = 'F';
     const MONTO_BRUTO = 'H';
@@ -78,7 +78,7 @@ class CargaResumenBoletasSii
         $sheet = $this->cargarExcel()[0];
         $hRow = $sheet->getHighestRow();
         $boletaEstados = $bhm->getObjectManager()->getRepository('ADBoletaBundle:BoletaEstado')->findAllByNombre();
-        $boletaEstadosTransforma=array('VIG' => 'Vigente', 'ANUL' => 'Anulada', 'VCA' => 'V.C.A.');
+        $boletaEstadosTransforma=array('VIG' => 'Vigente', 'ANUL' => 'Anulada', 'VCA' => 'V.C.A.', 'NULA' => 'Anulada');
         $ret=array();
         $dat_id=0;
         // iterar sobre filas
@@ -89,7 +89,7 @@ class CargaResumenBoletasSii
                 $estado = "" != self::BH_ESTADO ? $sheet->getCell(self::BH_ESTADO . $row)->getValue() : null;
                 $fecha = "" != self::BH_FECHA ? $sheet->getCell(self::BH_FECHA . $row)->getFormattedValue() : null;
                 $fechaArr=explode('-',$fecha);
-                $datetime=new \DateTime('20'.$fechaArr[2].'-'.$fechaArr[0].'-'.$fechaArr[1]);
+                $datetime=new \DateTime('20'.$fechaArr[2].'-'.$fechaArr[1].'-'.$fechaArr[0]);
                 $rut = "" != self::EM_RUT ? $sheet->getCell(self::EM_RUT . $row)->getValue() : null;
                 $m_bruto = "" != self::MONTO_BRUTO ? $sheet->getCell(self::MONTO_BRUTO . $row)->getValue() : null;
                 $m_retenido = "" != self::MONTO_RETENIDO ? $sheet->getCell(self::MONTO_RETENIDO . $row)->getValue() : null;
