@@ -33,5 +33,5 @@
         "symfony/phpunit-bridge": "^3.0",
         "doctrine/doctrine-fixtures-bundle": "^2.3"
     },
-    "version": "1.0.1"
+    "version": "1.0.2"
 }

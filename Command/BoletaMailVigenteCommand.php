@@ -34,6 +34,7 @@ class BoletaMailVigenteCommand extends ContainerAwareCommand
             ->addOption('mail_id','m',InputOption::VALUE_OPTIONAL,'id email en particular',null)
             ->addOption('boleta_formato','f',InputOption::VALUE_OPTIONAL,'formato del archivo de boleta a leer',BoletaService::XML)
             ->addOption('status','t',InputOption::VALUE_NONE,'mostrar barra de avance')
+            ->addOption('mailbox','b',InputOption::VALUE_OPTIONAL,'mailbox distinto de gmail',null)
             ->addOption('all','a',InputOption::VALUE_NONE,'releer todos los correos');
     }
 
@@ -47,7 +48,7 @@ class BoletaMailVigenteCommand extends ContainerAwareCommand
 
         $user = $input->getArgument('user');#'pagos@cgslogistica.cl';
         $password = $input->getArgument('password');#'pagos.2015';
-        $mailbox = "{imap.gmail.com:993/imap/ssl}INBOX";
+        $mailbox = ($input->getOption('mailbox') ? $input->getOption('mailbox') : '{imap.gmail.com:993/imap/ssl}')."INBOX";
 
         $conn=imap_open($mailbox , $user , $password);
         if($conn===false) {
