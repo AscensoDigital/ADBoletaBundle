@@ -190,13 +190,13 @@ class BoletaMailVigenteCommand extends ContainerAwareCommand
                                             $bhe->setEmpresa($empresa);
                                         }
                                     } catch(\Exception $e){
-                                        $output->writeln('Error fecha service boleta mail: '.$email.' RUT:'.$rut_boleta.' boleta: '.$boleta_numero);
+                                        $output->writeln('Error fecha service boleta mail ('.$extension.'): '.$email.' RUT:'.$rut_boleta.' boleta: '.$boleta_numero);
                                     }
                                 } catch (RuntimeException $e){
                                     if(is_null($bhe->getMonto())){
                                         $bhe->setBoletaEstado($bhe_invalid);
                                     }
-                                    $output->writeln('Error de Boleta Service: '.$email.' RUT:'.$rut_boleta.' boleta: '.$boleta_numero);
+                                    $output->writeln('Error de Boleta Service ('.$extension.'): '.$email.' RUT:'.$rut_boleta.' boleta: '.$boleta_numero);
                                 }
                             }
                         }

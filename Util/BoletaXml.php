@@ -64,6 +64,6 @@ class BoletaXml implements BoletaInterface
 
     public static function getFechaEmision()
     {
-        return self::$contenido->FechaGen;
+        return isset(self::$contenido->FechaGen) ? self::$contenido->FechaGen : (isset(self::$contenido->FechorGen) ? self::$contenido->FechorGen : '');
     }
 }
