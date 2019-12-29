@@ -88,20 +88,19 @@ class CargaResumenBoletasSii
             if ($numero > 0) {
                 $estado = "" != self::BH_ESTADO ? $sheet->getCell(self::BH_ESTADO . $row)->getValue() : null;
                 $fecha = "" != self::BH_FECHA ? $sheet->getCell(self::BH_FECHA . $row)->getFormattedValue() : null;
-                $fechaArr=explode('-',$fecha);
-                $datetime=new \DateTime('20'.$fechaArr[2].'-'.$fechaArr[0].'-'.$fechaArr[1]);
+                $fechaArr=explode('-',str_replace('/','-',$fecha));
+                $datetime=new \DateTime(($fechaArr[2]>100 ? $fechaArr[2] : '20'.$fechaArr[2]).'-'.$fechaArr[0].'-'.$fechaArr[1]);
                 $rut = "" != self::EM_RUT ? $sheet->getCell(self::EM_RUT . $row)->getValue() : null;
                 $m_bruto = "" != self::MONTO_BRUTO ? $sheet->getCell(self::MONTO_BRUTO . $row)->getValue() : null;
                 $m_retenido = "" != self::MONTO_RETENIDO ? $sheet->getCell(self::MONTO_RETENIDO . $row)->getValue() : null;
                 $m_pagado = "" != self::MONTO_PAGADO ? $sheet->getCell(self::MONTO_PAGADO . $row)->getValue() : null;
 
                 $ret[$dat_id]['rut'] = $rut;
-
+                /** @var BoletaHonorario $bh */
                 $bh = $bhm->findBoletaHonorarioBy(['numero' => $numero, 'rutEmisor' => $rut]);
                 if (!$bh) {
                     $be=isset($boletaEstados[$estado]) ? $boletaEstados[$estado] : $boletaEstados[$boletaEstadosTransforma[$estado]];
 
-                    /** @var BoletaHonorario $bh */
                     $bh = $bhm->createBoletaHonorario();
                     $bh->setNumero($numero)
                         ->setCargador($usuario)
@@ -112,15 +111,24 @@ class CargaResumenBoletasSii
                         ->setMontoImpuesto($m_retenido)
                         ->setMontoLiquido($m_pagado)
                         ->setBoletaEstado($be);
-                    $bhm->getObjectManager()->persist($bh);
 
                     $ret[$dat_id]['estado'] = 'Boleta agregada';
                     $ret[$dat_id]['class'] = 'bg-success';
                 }
                 else {
+                    if((is_null($bh->getMonto()) || $bh->getMonto()==0) && $m_bruto>0){
+                        $bh->setMonto($m_bruto);
+                    }
+                    if((is_null($bh->getMontoLiquido()) || $bh->getMontoLiquido()==0) && $m_pagado>0){
+                        $bh->setMontoLiquido($m_pagado);
+                    }
+                    if((is_null($bh->getMontoImpuesto()) || $bh->getMontoImpuesto()==0) && $m_retenido>0){
+                        $bh->setMontoImpuesto($m_retenido);
+                    }
                     $ret[$dat_id]['estado'] = 'En sistema simce';
                     $ret[$dat_id]['class'] = 'bg-info';
                 }
+                $bhm->getObjectManager()->persist($bh);
             }
             else {
                 $ret[$dat_id]['rut'] = '-';
