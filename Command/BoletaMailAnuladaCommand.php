@@ -46,10 +46,10 @@ class BoletaMailAnuladaCommand extends ContainerAwareCommand {
 
         if(is_null($input->getOption('mail_id'))){
             if($input->getOption('all')){
-                $anulados = imap_search($conn, 'SUBJECT "Anulada"', SE_UID);
+                $anulados = imap_search($conn, 'SUBJECT "Anulada"');
             }
             else {
-                $anulados = imap_search($conn, 'SUBJECT "Anulada" UNSEEN', SE_UID);
+                $anulados = imap_search($conn, 'SUBJECT "Anulada" UNSEEN');
             }
         }
         else {

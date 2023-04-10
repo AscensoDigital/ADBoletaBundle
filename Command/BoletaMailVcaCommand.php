@@ -43,10 +43,10 @@ class BoletaMailVcaCommand extends ContainerAwareCommand {
 
         if(is_null($input->getOption('mail_id'))){
             if($input->getOption('all')){
-                $anulados = imap_search($conn, 'SUBJECT "Solicitud de Anulacion"', SE_UID);
+                $anulados = imap_search($conn, 'SUBJECT "Solicitud de Anulacion"');
             }
             else {
-                $anulados = imap_search($conn, 'SUBJECT "Solicitud de Anulacion" UNSEEN', SE_UID);
+                $anulados = imap_search($conn, 'SUBJECT "Solicitud de Anulacion" UNSEEN');
             }
         }
         else {

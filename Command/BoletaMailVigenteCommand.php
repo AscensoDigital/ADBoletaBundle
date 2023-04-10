@@ -57,10 +57,10 @@ class BoletaMailVigenteCommand extends ContainerAwareCommand
         }
         if(is_null($input->getOption('mail_id'))){
             if($input->getOption('all')){
-                $vigentes = imap_search($conn, 'SUBJECT "Emision"', SE_UID);
+                $vigentes = imap_search($conn, 'SUBJECT "Emision"');
             }
             else {
-                $vigentes = imap_search($conn, 'SUBJECT "Emision" UNSEEN', SE_UID);
+                $vigentes = imap_search($conn, 'SUBJECT "Emision" UNSEEN');
             }
         }
         else {
