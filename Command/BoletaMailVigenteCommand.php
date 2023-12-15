@@ -35,7 +35,8 @@ class BoletaMailVigenteCommand extends ContainerAwareCommand
             ->addOption('boleta_formato','f',InputOption::VALUE_OPTIONAL,'formato del archivo de boleta a leer',BoletaService::XML)
             ->addOption('status','t',InputOption::VALUE_NONE,'mostrar barra de avance')
             ->addOption('mailbox','b',InputOption::VALUE_OPTIONAL,'mailbox distinto de gmail',null)
-            ->addOption('all','a',InputOption::VALUE_NONE,'releer todos los correos');
+            ->addOption('all','a',InputOption::VALUE_NONE,'releer todos los correos')
+            ->addOption('reprocesar','r', InputOption::VALUE_NONE,'reprocesa las boletas');
     }
 
     /**
@@ -70,6 +71,7 @@ class BoletaMailVigenteCommand extends ContainerAwareCommand
             imap_close($conn);
             return;
         }
+        // var_dump($vigentes);
 
         /** @var ObjectManager $em */
         $em = $this->getContainer()->get('doctrine')->getManager();
@@ -100,6 +102,8 @@ class BoletaMailVigenteCommand extends ContainerAwareCommand
         $cont=0;
         foreach ($vigentes as $email) {
             $contenidos=$email_reader->getContenido($conn,$email);
+            // var_dump($contenidos);
+            // exit();
             if(!isset($contenidos['plain'][0])) {
                 $output->writeln($email.' Correo sin cuerpo leible');
                 $email_body='';
@@ -122,10 +126,13 @@ class BoletaMailVigenteCommand extends ContainerAwareCommand
                 continue;
             }
             $this->existPath($this->getContainer()->getParameter('ad_boleta_ruta_boletas'). DIRECTORY_SEPARATOR . $empresa->getSlug());
-            //$output->writeln(' Buscando Boleta '.$boleta_numero.' RUT: '.$rut_boleta);
+            if($input->getOption('verbose')) {
+                $output->writeln(' Buscando Boleta ' . $boleta_numero . ' RUT: ' . $rut_boleta);
+            }
             /** @var BoletaHonorario $bhe */
             $bhe=$bh_manager->findBoletaHonorarioBy(array('rutEmisor' => $rut_boleta, 'numero' => $boleta_numero));
-            if(!$bhe or $bhe->isInvalidPdf()) {
+            // dump($bhe);
+            if(!$bhe or $bhe->isInvalidPdf() or $input->getOption('reprocesar')) {
                 if(!$bhe){
                     $bhe = $bh_manager->createBoletaHonorario();
                 }
@@ -151,27 +158,34 @@ class BoletaMailVigenteCommand extends ContainerAwareCommand
                         $extension = $nombre[count($nombre) - 1];
 
                         if (in_array($extension,['pdf', $boleta_formato])) {
-                            //dump($attachment ['attachment']);
+                            // dump($attachment ['attachment']);
                             $adjunto = $attachment ['attachment'];
                             if ($adjunto) {
                                 $path_boleta=$this->getContainer()->getParameter('ad_boleta_ruta_boletas'). DIRECTORY_SEPARATOR . $empresa->getSlug() . DIRECTORY_SEPARATOR .$nombreFichero;
-
+                                // dump($path_boleta);
                                 if($extension==BoletaService::PDF) {
                                     $bhe->setRutaArchivo($empresa->getSlug() . DIRECTORY_SEPARATOR . $nombreFichero);
                                 }
                                 //se guarda boleta en el servidor
                                 $gestor = fopen($path_boleta, 'w');
-                                fwrite($gestor, $adjunto);
-                                fclose($gestor);
+                                if($gestor==false) {
+                                    $output->writeln('Hubo un error al tratar de abrir: '.$path_boleta);
+                                }
+                                else {
+                                    fwrite($gestor, $adjunto);
+                                    fclose($gestor);
+                                }
 
                                 try {
                                     $boleta_srv->load($path_boleta,$extension);
-                                    /*$output->writeln('Lectura pdf');
-                                    $output->writeln('Glosa: '.$boleta_srv->getGlosa());
-                                    $output->writeln('Bruto: '.$boleta_srv->getMontoBruto());
-                                    $output->writeln('Impuesto: '.$boleta_srv->getMontoImpuesto());
-                                    $output->writeln('Liquido: '.$boleta_srv->getMontoLiquido());
-                                    $output->writeln('Fecha Boleta: '.$boleta_srv->getFechaBoleta());*/
+                                    if($input->getOption('verbose')) {
+                                        $output->writeln('Lectura '.$extension);
+                                        $output->writeln('Glosa: '.$boleta_srv->getGlosa());
+                                        $output->writeln('Bruto: '.$boleta_srv->getMontoBruto());
+                                        $output->writeln('Impuesto: '.$boleta_srv->getMontoImpuesto());
+                                        $output->writeln('Liquido: '.$boleta_srv->getMontoLiquido());
+                                        $output->writeln('Fecha Boleta: '.$boleta_srv->getFechaBoleta());
+                                    }
                                     try {
                                         $fecha_emision = $boleta_srv->getFechaEmisionEstandar();
                                         if (!is_null($fecha_emision)) {

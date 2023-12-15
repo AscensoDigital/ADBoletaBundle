@@ -48,7 +48,7 @@ class DefaultController extends Controller
     /**
      * @return \Symfony\Component\HttpFoundation\Response
      * @Route("/bhe/list", name="ad_boleta_boleta_list")
-     * @Security("is_granted('permiso','conta-boleta')")
+     * @Security("is_granted('permiso','ad_boleta-list')")
      */
     public function listAction()
     {
@@ -58,10 +58,9 @@ class DefaultController extends Controller
     /**
      * @return \Symfony\Component\HttpFoundation\Response
      * @Route("/bhe/list-table", name="ad_boleta_boleta_list_table")
-     * @Security("is_granted('permiso','conta-boleta')")
+     * @Security("is_granted('permiso','ad_boleta-list')")
      */
     public function listTableAction() {
-        $em = $this->getDoctrine()->getManager();
         $filtros = $this->get('ad_perfil.filtro_manager');
         $boletas = $this->get('ad_boleta.boleta_honorario_manager')->findArrayByFiltros($filtros);
         return $this->render('ADBoletaBundle:default:list-table.html.twig', array(
@@ -138,8 +137,8 @@ class DefaultController extends Controller
                     }
                 }
 
-                /** @var UsuarioPago $usuarioPago */
-                /*foreach ($boletaHonorario->getUsuarioPagos() as $usuarioPago) {
+                /* /** @var UsuarioPago $usuarioPago */
+                /* foreach ($boletaHonorario->getUsuarioPagos() as $usuarioPago) {
                     $usuarioPago->setBoletaHonorario(null);
                     $em->persist($usuarioPago);
                 }*/
