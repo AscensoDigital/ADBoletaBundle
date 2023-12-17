@@ -17,6 +17,8 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Filesystem\Exception\IOExceptionInterface;
 
 /**
  * Description of boletaMailAnuladaCommand
@@ -35,7 +37,7 @@ class BoletaMailAnuladaCommand extends ContainerAwareCommand {
             ->addOption('mailbox','b',InputOption::VALUE_OPTIONAL,'mailbox distinto de gmail',null)
             ->addOption('all','a',InputOption::VALUE_NONE,'releer todos los correos');
     }
-    
+
     protected function execute(InputInterface $input, OutputInterface $output) {
 
         $user = $input->getArgument('user');#'pagos@cgslogistica.cl';
@@ -56,7 +58,7 @@ class BoletaMailAnuladaCommand extends ContainerAwareCommand {
             $anulados=array($input->getOption('mail_id'));
         }
         if(!$anulados) {
-            imap_close($conn); 
+            imap_close($conn);
             return;
         }
         $tot=count($anulados);
@@ -122,8 +124,10 @@ class BoletaMailAnuladaCommand extends ContainerAwareCommand {
             else {
                 if(0 < strlen($bhe->getRutaArchivo())) {
                     $pdf_vigente = $bhe->getRutaArchivo();
+
                     if (file_exists($path_base.$pdf_vigente)) {
                         $path = explode('/', $pdf_vigente);
+                        $this->existPath($path_base.$path[0] . '/anulada');
                         $pdf_anulada = $path[0] . '/anulada/' . $path[1];
                         if (rename($path_base.$pdf_vigente, $path_base.$pdf_anulada)) {
                             $bhe->setRutaArchivo($pdf_anulada);
@@ -157,6 +161,18 @@ class BoletaMailAnuladaCommand extends ContainerAwareCommand {
         imap_close($conn);
         if($input->getOption('status')) {
             $progressBar->finish();
+        }
+    }
+
+    private function existPath($path){
+        echo $path;
+        $fs = new Filesystem();
+        if(!$fs->exists($path)) {
+            try {
+                $fs->mkdir($path);
+            } catch (IOExceptionInterface $e) {
+                echo "An error occurred while creating your directory at " . $e->getPath();
+            }
         }
     }
 }
